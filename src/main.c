@@ -1,9 +1,10 @@
-#include <SDL/SDL.h>     
-/*#include <SDL/SDL_image.h>*/            
+#include <SDL/SDL.h>      
+/*#include <SDL/SDL_image.h>*/               
 #include <GL/gl.h>                    
 #include <GL/glu.h>         
-#include <stdlib.h>   
-#include <stdio.h>                      
+#include <stdlib.h>      
+#include <stdio.h> 
+#include <math.h>                      
 
 #include "graphe.c"       
     
@@ -15,7 +16,7 @@
 /* Dimensions de la fenêtre */ 
 static unsigned int WINDOW_WIDTH = 800;       
 static unsigned int WINDOW_HEIGHT = 800; 
- 
+
 /* Nombre de bits par pixel de la fenêtre */
 static const unsigned int BIT_PER_PIXEL = 32;      
   
@@ -26,7 +27,7 @@ int main(int argc, char** argv) {
 
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");  
-    return EXIT_FAILURE;  
+    return EXIT_FAILURE;    
   }
   
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
@@ -35,19 +36,21 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE; 
   } 
 
-    
-  gluOrtho2D(-1., 1., -1., 1.);                                                 
-         
-  /* Titre de la fenêtre */       
-  SDL_WM_SetCaption("Shall we begin this arkanopong ?!", NULL); 
-
   Graphe *graphe;
   graphe = malloc(sizeof(Graphe));
   int tab[25];
-  initTab(tab);
+  Point2D position[5];
+  initTab(tab, position);
   
-  initGraphe(graphe, tab, 5);
-  afficheGraphe(graphe);
+  initGraphe(graphe, tab, 5); 
+  afficheGraphe(graphe);   
+    
+                                                  
+           
+  /* Titre de la fenêtre */         
+  SDL_WM_SetCaption("Shall we begin this arkanopong ?!", NULL);  
+
+  
 
 
   /* Boucle d'affichage */   
@@ -57,8 +60,9 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();                          
       
     /* Placer ici le code de dessin */       
-    glClear(GL_COLOR_BUFFER_BIT);       
-   
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    drawGraphe(graphe, position);
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();    

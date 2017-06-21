@@ -1,6 +1,11 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
+typedef struct Point2D
+{
+	float x, y;
+} Point2D;
+
 typedef struct
 {
     int nbsommets;
@@ -10,7 +15,8 @@ typedef struct
 void initGraphe(Graphe * g, int * m, int nbsommets);
 void afficheGraphe(const Graphe * G);
 
-void initTab(int* tab);
+void initTab(int* tab,Point2D *position);
+void drawLines(Point2D p1, Point2D p2); 
 
 #endif
 
