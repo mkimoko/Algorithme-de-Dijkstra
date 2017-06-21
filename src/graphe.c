@@ -102,9 +102,9 @@ void drawGraphe(Graphe *g, Point2D *position ){
 		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
 		 	}
 		glEnd();
-		sprintf(txt, "%d", i);
+		sprintf(txt, "%d", i+1);
 		glPopMatrix();
-		ecrire(position[i].x+1.75, position[i].y+0.85,txt ,font); 
+		ecrire(position[i].x+1.75, position[i].y-0.9,txt ,font); 
 
 	 	
 
