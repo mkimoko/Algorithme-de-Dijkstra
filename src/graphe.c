@@ -65,11 +65,16 @@ void initTab(int* tab, Point2D *position){
 }
 
 void drawLines(Point2D p1, Point2D p2){
+	glMatrixMode(GL_MODELVIEW);                
+        glLoadIdentity(); 
+        glPushMatrix();
+        glScalef(0.1, 0.1, 1);
 
-  glBegin(GL_LINE);
-	glColor3ub(180,180,180);
-	glVertex2i(p1.x, p1.y);glVertex2i(p2.x,p2.y);
-  glEnd();
+		glBegin(GL_LINES);
+			glColor3ub(255,255,255);
+			glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
+		glEnd();
+	glPopMatrix();
 }
 
 
@@ -93,7 +98,8 @@ void drawGraphe(Graphe *g, Point2D *position ){
 		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
 		 	}
 		glEnd();
-	 	glPopMatrix();
+		glPopMatrix();
+	 	
 
 	 	for (j = 0; j < g->nbsommets; j++)
 	 	{
@@ -102,6 +108,7 @@ void drawGraphe(Graphe *g, Point2D *position ){
 	 			drawLines(position[i], position[j]);
 	 		}
 	 	}
+
 
 	 	/**********Fin Matrice**********/
 	  } 
