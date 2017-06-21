@@ -36,7 +36,7 @@ void initTab(int* tab, Point2D *position){
 	/*De 1 à 1*/ /*De 1 à 2*/  /*De 1 à 3*/  /*De 1 à 4*/ /*De 1 à 5*/
 	tab[0] = 0; tab[1] = 5;   tab[2] = 20;  tab[3] = 18;  tab[4] = 0;
 	/*Position du noeud 1*/
-	position[0].x = -8.5;
+	position[0].x = -8.8;
 	position[0].y = 0;
 
 	/*De 2 à 1*/ /*De 2 à 2*/  /*De 2 à 3*/  /*De 2 à 4*/ /*De 2 à 5*/
@@ -48,7 +48,7 @@ void initTab(int* tab, Point2D *position){
 	/*De 3 à 1*/ /*De 3 à 2*/  /*De 3 à 3*/  /*De 3 à 4*/ /*De 3 à 5*/
 	tab[10] = 9; tab[11] = 0;   tab[12] = 0;  tab[13] = 0;  tab[14] = 17;
 	/*Position du noeud 3*/
-	position[2].x = -0.75;
+	position[2].x = -1;
 	position[2].y = -6.5;
 
 	/*De 4 à 1*/ /*De 4 à 2*/  /*De 4 à 3*/  /*De 4 à 4*/ /*De 4 à 5*/
@@ -60,7 +60,7 @@ void initTab(int* tab, Point2D *position){
 	/*De 5 à 1*/ /*De 5 à 2*/  /*De 5 à 3*/  /*De 5 à 4*/ /*De 5 à 5*/
 	tab[20] = 0; tab[21] = 19;   tab[22] = 31;  tab[23] = 0;  tab[24] = 0;
 	/*Position du noeud 5*/
-	position[4].x = 8;
+	position[4].x = 7.5;
 	position[4].y = -2.5;
 }
 
@@ -96,15 +96,15 @@ void drawGraphe(Graphe *g, Point2D *position ){
         glScalef(0.1, 0.1, 1);
         glTranslatef(position[i].x, position[i].y, 0);
 
-	 	/*glBegin(GL_TRIANGLE_FAN);
+	 	glBegin(GL_TRIANGLE_FAN);
 			glColor3d(255,255,255);
 			for (j = 0; j <= SEGMENTS; j++){
 		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
-		 	}*/
+		 	}
 		glEnd();
 		sprintf(txt, "%d", i);
 		glPopMatrix();
-		ecrire(position[i].x, position[i].y,txt ,font); 
+		ecrire(position[i].x+1.75, position[i].y+0.85,txt ,font); 
 
 	 	
 
@@ -128,8 +128,10 @@ void ecrire(int x, int y, char *string, void *font){
 	    glScalef(0.1, 0.1, 1);
 		glRasterPos2f(x,y); // Positionne le premier caractère de la chaîne
 	
-		glColor3d(240, 195, 0);
+		
 		for (i = 0; i < len; i++){
+			/*glColor3d(240, 195, 0);*/
+			glColor3f(240, 195, 0);
 			glutBitmapCharacter(font,string[i]); // Affiche chaque caractère de la chaîne
 		}
 		glPopMatrix();

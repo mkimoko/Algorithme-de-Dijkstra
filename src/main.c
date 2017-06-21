@@ -49,8 +49,8 @@ int main(int argc, char** argv) {
   initGraphe(graphe, tab, 5);  
   afficheGraphe(graphe);   
     
-                                                  
-           
+                                                   
+             
   /* Titre de la fenêtre */         
   SDL_WM_SetCaption("Shall we begin this arkanopong ?!", NULL);  
 
@@ -64,14 +64,14 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();                          
       
     /* Placer ici le code de dessin */       
-    glClear(GL_COLOR_BUFFER_BIT);   
-
-    drawGraphe(graphe, position);     
+    glClear(GL_COLOR_BUFFER_BIT);     
+ 
+    drawGraphe(graphe, position);                 
  
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();    
      
-    /* Boucle traitant les evenements */
+    /* Boucle traitant les evenements */ 
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
       /* L'utilisateur ferme la fenêtre : */     
@@ -89,8 +89,8 @@ int main(int argc, char** argv) {
 
           case SDL_MOUSEMOTION: 
           
-          break;
-
+          break; 
+  
 
         /* Touche clavier */
         case SDL_KEYDOWN:
