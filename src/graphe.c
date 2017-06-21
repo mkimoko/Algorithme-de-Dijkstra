@@ -81,7 +81,11 @@ void drawLines(Point2D p1, Point2D p2){
 
 void drawGraphe(Graphe *g, Point2D *position ){
 	int i, j;
+	char *txt;
 	gluOrtho2D(0., 5., 0., 5.);
+	void *font = malloc(sizeof(void));
+	font = GLUT_BITMAP_TIMES_ROMAN_24;
+	txt = malloc(sizeof(char));
 
 	for (i = 0; i < g->nbsommets; i++)
 	  {
@@ -92,13 +96,16 @@ void drawGraphe(Graphe *g, Point2D *position ){
         glScalef(0.1, 0.1, 1);
         glTranslatef(position[i].x, position[i].y, 0);
 
-	 	glBegin(GL_TRIANGLE_FAN);
+	 	/*glBegin(GL_TRIANGLE_FAN);
 			glColor3d(255,255,255);
 			for (j = 0; j <= SEGMENTS; j++){
 		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
-		 	}
+		 	}*/
 		glEnd();
+		sprintf(txt, "%d", i);
 		glPopMatrix();
+		ecrire(position[i].x, position[i].y,txt ,font); 
+
 	 	
 
 	 	for (j = 0; j < g->nbsommets; j++)
@@ -108,8 +115,23 @@ void drawGraphe(Graphe *g, Point2D *position ){
 	 			drawLines(position[i], position[j]);
 	 		}
 	 	}
-
-
 	 	/**********Fin Matrice**********/
 	  } 
+}
+
+void ecrire(int x, int y, char *string, void *font){
+	int len,i; // len donne la longueur de la chaîne de caractères
+	len = (int) strlen(string); // Calcule la longueur de la chaîne
+	glMatrixMode(GL_MODELVIEW);                
+	    glLoadIdentity(); 
+	    glPushMatrix();
+	    glScalef(0.1, 0.1, 1);
+		glRasterPos2f(x,y); // Positionne le premier caractère de la chaîne
+	
+		glColor3d(240, 195, 0);
+		for (i = 0; i < len; i++){
+			glutBitmapCharacter(font,string[i]); // Affiche chaque caractère de la chaîne
+		}
+		glPopMatrix();
+
 }

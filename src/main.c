@@ -1,14 +1,15 @@
 #include <SDL/SDL.h>      
 /*#include <SDL/SDL_image.h>*/               
 #include <GL/gl.h>                    
-#include <GL/glu.h>         
+#include <GL/glu.h> 
+#include <GL/glut.h>               
 #include <stdlib.h>      
 #include <stdio.h> 
-#include <math.h>                      
-
-#include "graphe.c"       
+#include <math.h>                       
     
-
+#include "graphe.c"        
+    
+  
 #define MYSCALE 0.05 
 
 
@@ -25,6 +26,9 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 int main(int argc, char** argv) { 
 
+  // initialisation de GLUT
+  glutInit(&argc, argv);
+
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {  
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");  
     return EXIT_FAILURE;    
@@ -36,7 +40,7 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE; 
   } 
 
-  Graphe *graphe;   
+  Graphe *graphe;    
   graphe = malloc(sizeof(Graphe));
   int tab[25]; 
   Point2D position[5];
@@ -60,17 +64,17 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();                          
       
     /* Placer ici le code de dessin */       
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);   
 
-    drawGraphe(graphe, position);
-
+    drawGraphe(graphe, position);     
+ 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();    
      
     /* Boucle traitant les evenements */
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
-      /* L'utilisateur ferme la fenêtre : */    
+      /* L'utilisateur ferme la fenêtre : */     
       if(e.type == SDL_QUIT) {
         loop = 0;
         break;

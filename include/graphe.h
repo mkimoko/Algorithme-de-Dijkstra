@@ -18,5 +18,7 @@ void afficheGraphe(const Graphe * G);
 void initTab(int* tab,Point2D *position);
 void drawLines(Point2D p1, Point2D p2); 
 
+void ecrire(int x, int y, char *string, void *font);
+
 #endif
 
