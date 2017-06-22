@@ -34,13 +34,13 @@ void initTab(int* tab, Point2D *position){
 
 
 	/*De 1 à 1*/ /*De 1 à 2*/  /*De 1 à 3*/  /*De 1 à 4*/ /*De 1 à 5*/
-	tab[0] = 0; tab[1] = 5;   tab[2] = 20;  tab[3] = 18;  tab[4] = 0;
+	tab[0] = 0; tab[1] = 7;   tab[2] = 9;  tab[3] = 18;  tab[4] = 0;
 	/*Position du noeud 1*/
 	position[0].x = -8.8;
 	position[0].y = 0;
 
 	/*De 2 à 1*/ /*De 2 à 2*/  /*De 2 à 3*/  /*De 2 à 4*/ /*De 2 à 5*/
-	tab[5] = 7; tab[6] = 0;   tab[7] = 0;  tab[8] = 27;  tab[9] = 0;
+	tab[5] = 7; tab[6] = 0;   tab[7] = 0;  tab[8] = 27;  tab[9] = 19;
 	/*Position du noeud 2*/
 	position[1].x = -0.75;
 	position[1].y = 6.5;
@@ -52,13 +52,13 @@ void initTab(int* tab, Point2D *position){
 	position[2].y = -6.5;
 
 	/*De 4 à 1*/ /*De 4 à 2*/  /*De 4 à 3*/  /*De 4 à 4*/ /*De 4 à 5*/
-	tab[15] = 7; tab[16] = 6;   tab[17] = 0;  tab[18] = 0;  tab[19] = 0;
+	tab[15] = 18; tab[16] = 27;   tab[17] = 0;  tab[18] = 0;  tab[19] = 0;
 	/*Position du noeud 4*/
 	position[3].x = 2.5;
-	position[3].y = 0;	 
+	position[3].y = 0;
 
 	/*De 5 à 1*/ /*De 5 à 2*/  /*De 5 à 3*/  /*De 5 à 4*/ /*De 5 à 5*/
-	tab[20] = 0; tab[21] = 19;   tab[22] = 31;  tab[23] = 0;  tab[24] = 0;
+	tab[20] = 0; tab[21] = 19;   tab[22] = 17;  tab[23] = 0;  tab[24] = 0;
 	/*Position du noeud 5*/
 	position[4].x = 7.5;
 	position[4].y = -2.5;
@@ -104,7 +104,7 @@ void drawGraphe(Graphe *g, Point2D *position ){
 		glEnd();
 		sprintf(txt, "%d", i+1);
 		glPopMatrix();
-		ecrire(position[i].x+1.75, position[i].y-0.9,txt ,font); 
+		ecrire(position[i].x+1.75, position[i].y+0.9,txt ,font); 
 
 	 	
 
@@ -125,13 +125,12 @@ void ecrire(int x, int y, char *string, void *font){
 	glMatrixMode(GL_MODELVIEW);                
 	    glLoadIdentity(); 
 	    glPushMatrix();
+	    glColor3f(255, 255, 255);
 	    glScalef(0.1, 0.1, 1);
 		glRasterPos2f(x,y); // Positionne le premier caractère de la chaîne
 	
 		
 		for (i = 0; i < len; i++){
-			/*glColor3d(240, 195, 0);*/
-			glColor3f(240, 195, 0);
 			glutBitmapCharacter(font,string[i]); // Affiche chaque caractère de la chaîne
 		}
 		glPopMatrix();

@@ -1,15 +1,15 @@
-#include <SDL/SDL.h>      
-/*#include <SDL/SDL_image.h>*/ 
-#include <GL/gl.h>                     
-#include <GL/glu.h> 
+#include <SDL/SDL.h>       
+/*#include <SDL/SDL_image.h>*/   
+#include <GL/gl.h>                       
+#include <GL/glu.h>    
 #include <GL/glut.h>               
 #include <stdlib.h>      
 #include <stdio.h>  
 #include <math.h>                       
+     
+#include "graphe.c"         
     
-#include "graphe.c"        
-    
-  
+   
 #define MYSCALE 0.05 
 
 
@@ -107,11 +107,11 @@ int main(int argc, char** argv) {
           }
 
 
-          if( e.key.keysym.sym == SDLK_q)
+          if( e.key.keysym.sym == SDLK_q) 
             SDL_Quit();
           break;
 
-          
+           
         default:
           break;
       }
