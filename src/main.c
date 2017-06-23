@@ -24,30 +24,31 @@ static const unsigned int BIT_PER_PIXEL = 32;
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;   
 
-int main(int argc, char** argv) { 
-
-  // initialisation de GLUT
-  glutInit(&argc, argv);
-
-  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {  
-    fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");  
-    return EXIT_FAILURE;    
-  }
-  
+int main(int argc, char** argv) {       
+     
+  // initialisation de GLUT          
+  glutInit(&argc, argv);               
+       
+  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {   
+    fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
+    return EXIT_FAILURE;                    
+  }            
+   
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-    return EXIT_FAILURE; 
-  } 
+    return EXIT_FAILURE;       
+  }  
 
-  Graphe *graphe;    
-  graphe = malloc(sizeof(Graphe));
-  int tab[25]; 
+  Graphe *graphe;      
+  graphe = malloc(sizeof(Graphe));      
+  int tab[25];  
   Point2D position[5];
   initTab(tab, position);
   
-  initGraphe(graphe, tab, 5);  
-  afficheGraphe(graphe);   
+  initGraphe(graphe, tab, 5);       
+  afficheGraphe(graphe); 
+  Dijkstra(graphe, 2, 5 );      
     
                                                    
              

@@ -26,7 +26,7 @@ void afficheGraphe(const Graphe * G)
 		
 		printf("\t");
 		for (j=0; j<G->nbsommets; j++) printf("%d ",G->matrice[i*G->nbsommets + j]);
-		printf("\n");
+		printf("\n\n");
 	}
 }
 
@@ -135,4 +135,51 @@ void ecrire(int x, int y, char *string, void *font){
 		}
 		glPopMatrix();
 
+}
+
+void Dijkstra(Graphe *g, int depart, int arrive){
+	int poids[g->nbsommets];
+	int antecedant[g->nbsommets];
+	int parcourue[g->nbsommets];
+	int affiche[g->nbsommets*g->nbsommets];
+	int i = 0;
+	int courant = 0;/*variable test du poids*/
+	int min = -1; 
+	int boo = 0;
+
+	for(i = 0; i < g->nbsommets; i++){
+		poids[i] = 999999; /* Poids infini */
+		antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
+		parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
+		affiche[i] = -1;
+	}
+	poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
+
+	parcourue[depart-1] = 1;
+	courant = depart-1;
+
+	/*Tant que le poids d'arrive n'est pas le plus faible*/
+	while( boo == 0){
+		/*printf("yes\n");*/
+		/*On recherche les voisin de noeud courant*/
+		printf("antecedant 1 = %d - antecedant 4 = %d\n\n",antecedant[1],antecedant[4] );
+		for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
+		{
+			boo = 1;
+			if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
+			{
+				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
+				antecedant[i-courant*g->nbsommets] = courant;
+			}
+			
+
+			printf("Poids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
+			printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
+			printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
+			printf("\n\n");
+
+		}
+	}
+
+		
 }

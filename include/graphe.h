@@ -20,5 +20,7 @@ void drawLines(Point2D p1, Point2D p2);
 
 void ecrire(int x, int y, char *string, void *font);
 
+void Dijkstra(Graphe *g, int depart, int arrive);
+
 #endif
 
