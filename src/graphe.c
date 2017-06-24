@@ -144,8 +144,8 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	int affiche[g->nbsommets*g->nbsommets];
 	int i = 0;
 	int courant = 0;/*variable test du poids*/
-	int min = -1; 
-	int boo = 0;
+	int min = -1;
+	int poidsmin = 9999999; 
 
 	for(i = 0; i < g->nbsommets; i++){
 		poids[i] = 999999; /* Poids infini */
@@ -159,26 +159,34 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	courant = depart-1;
 
 	/*Tant que le poids d'arrive n'est pas le plus faible*/
-	while( boo == 0){
-		/*printf("yes\n");*/
+	while( poids[arrive-1] != poids[min] ){
+		printf("\n\n");
 		/*On recherche les voisin de noeud courant*/
-		printf("antecedant 1 = %d - antecedant 4 = %d\n\n",antecedant[1],antecedant[4] );
 		for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 		{
-			boo = 1;
 			if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 			{
 				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
 				antecedant[i-courant*g->nbsommets] = courant;
+				if (poids[i-courant*g->nbsommets] < poidsmin){
+					min = i-courant*g->nbsommets;
+					poidsmin = poids[i-courant*g->nbsommets];
+				}
+				poidsmin = 999999;
+				printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
+				printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
+				printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
+				printf("\n\n");
 			}
 			
-
-			printf("Poids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
-			printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
-			printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
-			printf("\n\n");
-
 		}
+		parcourue[min] = 1;
+		courant = min;
+		printf("La valeur à travailler maintenant est %d\n",min );
+		printf("parcourue[%d] = %d\n",min, parcourue[min] );
+		printf("courant = %d\n", courant);
+		printf("Poid de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min] );
+		 
 	}
 
 		

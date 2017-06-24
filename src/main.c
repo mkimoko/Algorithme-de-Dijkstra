@@ -17,15 +17,15 @@
 /* Dimensions de la fenêtre */ 
 static unsigned int WINDOW_WIDTH = 800;       
 static unsigned int WINDOW_HEIGHT = 800; 
-
+ 
 /* Nombre de bits par pixel de la fenêtre */
-static const unsigned int BIT_PER_PIXEL = 32;      
+static const unsigned int BIT_PER_PIXEL = 32;                 
   
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;   
 
-int main(int argc, char** argv) {       
-     
+int main(int argc, char** argv) {        
+      
   // initialisation de GLUT          
   glutInit(&argc, argv);               
        
@@ -38,9 +38,9 @@ int main(int argc, char** argv) {
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
     return EXIT_FAILURE;       
-  }  
+  }   
 
-  Graphe *graphe;      
+  Graphe *graphe;       
   graphe = malloc(sizeof(Graphe));      
   int tab[25];  
   Point2D position[5];
@@ -48,15 +48,12 @@ int main(int argc, char** argv) {
   
   initGraphe(graphe, tab, 5);       
   afficheGraphe(graphe); 
-  Dijkstra(graphe, 2, 5 );      
+  Dijkstra(graphe, 4, 3 );       
     
                                                    
              
   /* Titre de la fenêtre */         
-  SDL_WM_SetCaption("Shall we begin this arkanopong ?!", NULL);  
-
-  
-
+  SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
   /* Boucle d'affichage */   
   int loop = 1;   
