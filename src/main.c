@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
   Point2D position[5];
   initTab(tab, position);
      
-  initGraphe(graphe, tab, 5);          
+  initGraphe(graphe, tab, 5);           
   afficheGraphe(graphe); 
          
       
@@ -75,11 +75,11 @@ int main(int argc, char** argv) {
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
       /* L'utilisateur ferme la fenêtre : */     
-      if(e.type == SDL_QUIT) {
+      if(e.type == SDL_QUIT) { 
         loop = 0;
         break;
       }
-      
+       
       /* Quelques exemples de traitement d'evenements : */
       switch(e.type) {
         /* Clic souris */
