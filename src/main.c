@@ -27,7 +27,7 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 int main(int argc, char** argv) {        
       
   // initialisation de GLUT             
-  glutInit(&argc, argv);                          
+  glutInit(&argc, argv);                                     
          
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {            
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        

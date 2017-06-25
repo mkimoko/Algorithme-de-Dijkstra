@@ -148,6 +148,7 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	int poidsmin = 9999999;
 	int tmp_poids = 0;
 	int tmp_antecedant = -1; 
+	int chemin[g->nbsommets];
 
 	for(i = 0; i < g->nbsommets; i++){
 		poids[i] = 999999; /* Poids infini */
@@ -169,15 +170,11 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 			/*Si un noeud rempli les conditions*/
 			if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 			{
+				/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
 				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
-				/*tmp_poids = poids[courant] + g->matrice[i];*/
-				/*tmp_antecedant*/
+				/*On marque son antécédant*/
 				antecedant[i-courant*g->nbsommets] = courant;
 
-				/***********if ( /*tmp_poids*****poids[i-courant*g->nbsommets] < poidsmin ){
-					min = i-courant*g->nbsommets;
-					poidsmin = poids[i-courant*g->nbsommets]/*tmp_poids*;
-				}****/
 				printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
 				printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
 				printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
@@ -187,7 +184,7 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 		}
 
 
-
+		/*On recherche le noeud avec le poids minimale non parcourue*/
 		for (i = 0; i < g->nbsommets; i++)
 		{
 			if (parcourue[i] == 0 && poids[i] != 999999)
@@ -205,16 +202,34 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 			}
 		}
 
-		/*poids[min] = poidsmin;*/ 
 		parcourue[min] = 1;
 		courant = min;
 		poidsmin = 999999;
 		printf("La valeur à travailler maintenant est %d\n",min );
 		printf("parcourue[%d] = %d\n",min, parcourue[min] );
 		printf("courant = %d\n", courant);
-		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min] );
+		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);
 		
 	}
+
+	i = 0;
+	while(antecedant[min] != -1){
+		printf("\nmin = %d\n",min );
+		chemin[i] = antecedant[min];
+		printf("chemin i = %d\n",chemin[i]);
+		min = antecedant[min];
+		printf("antecedant min = %d\n",antecedant[i]);
+		i++;
+	}
+
+	printf("%d Le chemin est: \n", i);
+	for (i = i-1; i >= 0; i--)
+	{
+		printf("%d\t",chemin[i] );
+	}
+	printf("%d\n",arrive-1 );
+
+
 
 		
 }
