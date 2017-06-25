@@ -26,13 +26,13 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 int main(int argc, char** argv) {        
       
-  // initialisation de GLUT          
-  glutInit(&argc, argv);                     
+  // initialisation de GLUT             
+  glutInit(&argc, argv);                          
          
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {            
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
     return EXIT_FAILURE;                    
-  }             
+  }              
    
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
    
   initGraphe(graphe, tab, 5);        
   afficheGraphe(graphe); 
-  Dijkstra(graphe, 1, 5 );        
+  Dijkstra(graphe, 4, 3 );        
     
                                                    
              

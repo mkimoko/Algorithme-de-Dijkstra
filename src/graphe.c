@@ -1,5 +1,6 @@
 #include "../include/graphe.h"
 #define SEGMENTS 128
+#define min(a,b) (a<=b?a:b)
 
 
 
@@ -141,13 +142,12 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	int antecedant[g->nbsommets];
 	int parcourue[g->nbsommets];
 	int affiche[g->nbsommets*g->nbsommets];
-	int i = 0;
+	int i = 0, j = 0;
 	int courant = 0;/*variable test du poids*/
 	int min = -1;
 	int poidsmin = 9999999;
 	int tmp_poids = 0;
 	int tmp_antecedant = -1; 
-	int boo = 0;
 
 	for(i = 0; i < g->nbsommets; i++){
 		poids[i] = 999999; /* Poids infini */
@@ -169,16 +169,15 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 			/*Si un noeud rempli les conditions*/
 			if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 			{
-				/*poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
-				antecedant[i-courant*g->nbsommets] = courant;*/
-				tmp_poids = poids[courant] + g->matrice[i];
-				tmp_antecedant = courant;
-				if (/*poids[i-courant*g->nbsommets] < poidsmin*/ tmp_poids < poidsmin){
-					/*min = i-courant*g->nbsommets;
-					poidsmin = poids[i-courant*g->nbsommets];*/
+				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
+				/*tmp_poids = poids[courant] + g->matrice[i];*/
+				/*tmp_antecedant*/
+				antecedant[i-courant*g->nbsommets] = courant;
+
+				/***********if ( /*tmp_poids*****poids[i-courant*g->nbsommets] < poidsmin ){
 					min = i-courant*g->nbsommets;
-					poidsmin = tmp_poids;
-				}
+					poidsmin = poids[i-courant*g->nbsommets]/*tmp_poids*;
+				}****/
 				printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
 				printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
 				printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
@@ -186,17 +185,37 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 			}
 			
 		}
-		poids[min] = poidsmin; 
+
+
+
+		for (i = 0; i < g->nbsommets; i++)
+		{
+			if (parcourue[i] == 0 && poids[i] != 999999)
+			{
+				for (j = 0; j < g->nbsommets; j++)
+				{
+					if (parcourue[j] == 0 && poids[j] <= poidsmin && poids[j] != 999999)
+					{
+						poidsmin = poids[j];
+						min = j;
+						printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
+						printf("Minimum = %d\n\n\n",min );
+					}
+				}
+			}
+		}
+
+		/*poids[min] = poidsmin;*/ 
 		parcourue[min] = 1;
 		courant = min;
-		boo++;
+		poidsmin = 999999;
 		printf("La valeur à travailler maintenant est %d\n",min );
 		printf("parcourue[%d] = %d\n",min, parcourue[min] );
 		printf("courant = %d\n", courant);
 		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min] );
 		
-		poidsmin = 999999; 
 	}
 
 		
 }
+
