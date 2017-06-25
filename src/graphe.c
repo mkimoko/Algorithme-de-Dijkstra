@@ -1,6 +1,5 @@
 #include "../include/graphe.h"
 #define SEGMENTS 128
-#define min(a,b) (a<=b?a:b)
 
 
 
@@ -137,7 +136,7 @@ void ecrire(int x, int y, char *string, void *font){
 
 }
 
-void Dijkstra(Graphe *g, int depart, int arrive){
+void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position){
 	int poids[g->nbsommets];
 	int antecedant[g->nbsommets];
 	int parcourue[g->nbsommets];
@@ -146,9 +145,10 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	int courant = 0;/*variable test du poids*/
 	int min = -1;
 	int poidsmin = 9999999;
-	int tmp_poids = 0;
-	int tmp_antecedant = -1; 
 	int chemin[g->nbsommets];
+	SDL_Event e;
+
+	drawGraphe(g,position );
 
 	for(i = 0; i < g->nbsommets; i++){
 		poids[i] = 999999; /* Poids infini */
@@ -161,9 +161,21 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 	parcourue[depart-1] = 1;
 	courant = depart-1;
 
+
 	/*Tant que le poids d'arrive n'est pas le plus faible*/
 	while( poids[min] != poids[arrive-1]){
-		printf("\n\n");
+		printf("sqdn\n");
+
+		while(SDL_PollEvent(&e)){
+			printf("yo\n");
+			switch(e.key.keysym.sym){
+				case SDLK_p:
+						circleColor(position[courant], 0);
+						printf("Coloration cercle\n");
+						break;
+			}
+		}
+
 		/*On recherche les voisin de noeud courant*/
 		for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 		{
@@ -172,13 +184,23 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 			{
 				/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
 				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
+				while(SDL_PollEvent(&e)){
+
+					switch(e.key.keysym.sym ){
+						case SDLK_p:
+								drawColor(position[courant], position[i-courant*g->nbsommets], 0);
+								printf("Coloration arc\n");
+					}
+						
+				}
+				
 				/*On marque son antécédant*/
 				antecedant[i-courant*g->nbsommets] = courant;
 
-				printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
+				/*printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
 				printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
 				printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
-				printf("\n\n");
+				printf("\n\n");*/
 			}
 			
 		}
@@ -195,8 +217,8 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 					{
 						poidsmin = poids[j];
 						min = j;
-						printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
-						printf("Minimum = %d\n\n\n",min );
+						/*printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
+						printf("Minimum = %d\n\n\n",min );*/
 					}
 				}
 			}
@@ -205,13 +227,13 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 		parcourue[min] = 1;
 		courant = min;
 		poidsmin = 999999;
-		printf("La valeur à travailler maintenant est %d\n",min );
+		/*printf("La valeur à travailler maintenant est %d\n",min );
 		printf("parcourue[%d] = %d\n",min, parcourue[min] );
 		printf("courant = %d\n", courant);
-		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);
-		
+		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);*/	
 	}
 
+	/*On stocke le plus court chemin dans un tableau*/
 	i = 0;
 	while(antecedant[min] != -1){
 		printf("\nmin = %d\n",min );
@@ -222,15 +244,50 @@ void Dijkstra(Graphe *g, int depart, int arrive){
 		i++;
 	}
 
+	/*On affiche le chemin*/
 	printf("%d Le chemin est: \n", i);
 	for (i = i-1; i >= 0; i--)
 	{
 		printf("%d\t",chemin[i] );
 	}
 	printf("%d\n",arrive-1 );
-
-
-
 		
 }
 
+
+void drawColor(Point2D p1, Point2D p2, int color){
+	glMatrixMode(GL_MODELVIEW);                
+        glLoadIdentity(); 
+        glPushMatrix();
+        glScalef(0.1, 0.1, 1);
+
+		glBegin(GL_LINES);
+			if (color == 0)/*rouge*/
+				glColor3ub(255, 0, 0);
+
+			if (color == 1)/*dorée*/
+				glColor3ub(240, 195, 0);
+			
+			glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
+		glEnd();
+	glPopMatrix();
+}
+
+void circleColor(Point2D p1, int color){
+	glMatrixMode(GL_MODELVIEW);                
+        glLoadIdentity(); 
+        glPushMatrix();
+        glScalef(0.1, 0.1, 1);
+        glTranslatef(p1.x, p1.y, 0);
+
+	 	glBegin(GL_TRIANGLE_FAN);
+	 		if (color == 0)/*rouge*/
+				glColor3ub(255, 0, 0);
+
+			if (color == 1)/*dorée*/
+				glColor3ub(240, 195, 0);
+			for (int j = 0; j <= SEGMENTS; j++){
+		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
+		 	}
+	glEnd();
+}

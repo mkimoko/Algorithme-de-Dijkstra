@@ -19,7 +19,7 @@ static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800; 
  
 /* Nombre de bits par pixel de la fenêtre */
-static const unsigned int BIT_PER_PIXEL = 32;                 
+static const unsigned int BIT_PER_PIXEL = 32;                   
   
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;   
@@ -27,11 +27,11 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 int main(int argc, char** argv) {        
       
   // initialisation de GLUT             
-  glutInit(&argc, argv);                                     
+  glutInit(&argc, argv);                                
          
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {            
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
-    return EXIT_FAILURE;                    
+    return EXIT_FAILURE;                     
   }              
    
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
@@ -41,16 +41,16 @@ int main(int argc, char** argv) {
   }    
 
   Graphe *graphe;        
-  graphe = malloc(sizeof(Graphe));      
-  int tab[25];  
+  graphe = malloc(sizeof(Graphe));
+  int tab[25];   
   Point2D position[5];
   initTab(tab, position);
    
   initGraphe(graphe, tab, 5);        
   afficheGraphe(graphe); 
-  Dijkstra(graphe, 4, 3 );        
-    
-                                                   
+  /*Dijkstra(graphe, 4, 3,position );*/        
+      
+                                                    
              
   /* Titre de la fenêtre */         
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
@@ -59,16 +59,17 @@ int main(int argc, char** argv) {
   int loop = 1;   
   while(loop) { 
     /* Récupération du temps au début de la boucle */        
-    Uint32 startTime = SDL_GetTicks();                          
+    Uint32 startTime = SDL_GetTicks();                            
       
-    /* Placer ici le code de dessin */       
-    glClear(GL_COLOR_BUFFER_BIT);     
- 
-    drawGraphe(graphe, position);                 
- 
+    /* Placer ici le code de dessin */          
+    glClear(GL_COLOR_BUFFER_BIT);       
+  
+    /*drawGraphe(graphe, position); */
+    Dijkstra(graphe, 1, 5,position );                  
+  
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
-    SDL_GL_SwapBuffers();    
-     
+    SDL_GL_SwapBuffers();       
+      
     /* Boucle traitant les evenements */ 
     SDL_Event e;
     while(SDL_PollEvent(&e)) {
@@ -103,7 +104,7 @@ int main(int argc, char** argv) {
           if( e.key.keysym.sym == SDLK_RIGHT){
             
           }
-
+ 
 
           if( e.key.keysym.sym == SDLK_q) 
             SDL_Quit();
