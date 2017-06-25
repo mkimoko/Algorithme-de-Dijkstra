@@ -78,7 +78,7 @@ void drawLines(Point2D p1, Point2D p2){
 
 
 
-void drawGraphe(Graphe *g, Point2D *position ){
+void drawGraphe(Graphe *g, Point2D *position, int boo ){
 	int i, j;
 	char *txt;
 	gluOrtho2D(0., 5., 0., 5.);
@@ -86,36 +86,41 @@ void drawGraphe(Graphe *g, Point2D *position ){
 	font = GLUT_BITMAP_TIMES_ROMAN_24;
 	txt = malloc(sizeof(char));
 
-	for (i = 0; i < g->nbsommets; i++)
-	  {
-	  	/********Création Matrice********/
-	  	glMatrixMode(GL_MODELVIEW);                
-        glLoadIdentity(); 
-        glPushMatrix();
-        glScalef(0.1, 0.1, 1);
-        glTranslatef(position[i].x, position[i].y, 0);
+	if (boo == 1)
+	{
+		for (i = 0; i < g->nbsommets; i++)
+		  {
+		  	/********Création Matrice********/
+		  	glMatrixMode(GL_MODELVIEW);                
+	        glLoadIdentity(); 
+	        glPushMatrix();
+	        glScalef(0.1, 0.1, 1);
+	        glTranslatef(position[i].x, position[i].y, 0);
 
-	 	glBegin(GL_TRIANGLE_FAN);
-			glColor3d(255,255,255);
-			for (j = 0; j <= SEGMENTS; j++){
-		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
+		 	glBegin(GL_TRIANGLE_FAN);
+				glColor3d(255,255,255);
+				for (j = 0; j <= SEGMENTS; j++){
+			      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
+			 	}
+			glEnd();
+			sprintf(txt, "%d", i+1);
+			glPopMatrix();
+			ecrire(position[i].x+1.75, position[i].y+0.9,txt ,font); 
+
+		 	
+
+		 	for (j = 0; j < g->nbsommets; j++)
+		 	{
+		 		if (g->matrice[i*g->nbsommets + j] > 0)
+		 		{
+		 			drawLines(position[i], position[j]);
+		 		}
 		 	}
-		glEnd();
-		sprintf(txt, "%d", i+1);
-		glPopMatrix();
-		ecrire(position[i].x+1.75, position[i].y+0.9,txt ,font); 
+		 	/**********Fin Matrice**********/
+		  } 
+	}
 
-	 	
-
-	 	for (j = 0; j < g->nbsommets; j++)
-	 	{
-	 		if (g->matrice[i*g->nbsommets + j] > 0)
-	 		{
-	 			drawLines(position[i], position[j]);
-	 		}
-	 	}
-	 	/**********Fin Matrice**********/
-	  } 
+	
 }
 
 void ecrire(int x, int y, char *string, void *font){
@@ -136,11 +141,10 @@ void ecrire(int x, int y, char *string, void *font){
 
 }
 
-void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position){
+void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int poids[g->nbsommets];
 	int antecedant[g->nbsommets];
 	int parcourue[g->nbsommets];
-	int affiche[g->nbsommets*g->nbsommets];
 	int i = 0, j = 0;
 	int courant = 0;/*variable test du poids*/
 	int min = -1;
@@ -148,146 +152,159 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position){
 	int chemin[g->nbsommets];
 	SDL_Event e;
 
-	drawGraphe(g,position );
+	if(boo == 0)
+	{
+		drawGraphe(g, position, 1 );
 
-	for(i = 0; i < g->nbsommets; i++){
-		poids[i] = 999999; /* Poids infini */
-		antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
-		parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
-		affiche[i] = -1;
-	}
-	poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
-
-	parcourue[depart-1] = 1;
-	courant = depart-1;
-
-
-	/*Tant que le poids d'arrive n'est pas le plus faible*/
-	while( poids[min] != poids[arrive-1]){
-		printf("sqdn\n");
-
-		while(SDL_PollEvent(&e)){
-			printf("yo\n");
-			switch(e.key.keysym.sym){
-				case SDLK_p:
-						circleColor(position[courant], 0);
-						printf("Coloration cercle\n");
-						break;
-			}
+		for(i = 0; i < g->nbsommets; i++){
+			poids[i] = 999999; /* Poids infini */
+			antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
+			parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
 		}
+		poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
 
-		/*On recherche les voisin de noeud courant*/
-		for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
-		{
-			/*Si un noeud rempli les conditions*/
-			if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
+		parcourue[depart-1] = 1;
+		courant = depart-1;
+
+
+		/*Tant que le poids d'arrive n'est pas le plus faible*/
+		while( poids[min] != poids[arrive-1] ){
+
+			while( e.key.keysym.sym != SDLK_p)
+				circleColor(position[courant], 0);
+
+			/*On recherche les voisin de noeud courant*/
+			for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 			{
-				/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
-				poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
-				while(SDL_PollEvent(&e)){
+				/*Si un noeud rempli les conditions*/
+				if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
+				{
+					/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
+					poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
+					/*On marque son antécédant*/
+					antecedant[i-courant*g->nbsommets] = courant;
+					while( e.key.keysym.sym != SDLK_p)
+						drawColor(position[i], position[i-courant*g->nbsommets], 1);
 
-					switch(e.key.keysym.sym ){
-						case SDLK_p:
-								drawColor(position[courant], position[i-courant*g->nbsommets], 0);
-								printf("Coloration arc\n");
-					}
-						
+					/*printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
+					printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
+					printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
+					printf("\n\n");*/
 				}
 				
-				/*On marque son antécédant*/
-				antecedant[i-courant*g->nbsommets] = courant;
-
-				/*printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
-				printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
-				printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
-				printf("\n\n");*/
 			}
-			
-		}
 
 
-		/*On recherche le noeud avec le poids minimale non parcourue*/
-		for (i = 0; i < g->nbsommets; i++)
-		{
-			if (parcourue[i] == 0 && poids[i] != 999999)
+			/*On recherche le noeud avec le poids minimale non parcourue*/
+			for (i = 0; i < g->nbsommets; i++)
 			{
-				for (j = 0; j < g->nbsommets; j++)
+				if (parcourue[i] == 0 && poids[i] != 999999)
 				{
-					if (parcourue[j] == 0 && poids[j] <= poidsmin && poids[j] != 999999)
+					for (j = 0; j < g->nbsommets; j++)
 					{
-						poidsmin = poids[j];
-						min = j;
-						/*printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
-						printf("Minimum = %d\n\n\n",min );*/
+						if (parcourue[j] == 0 && poids[j] <= poidsmin && poids[j] != 999999)
+						{
+							poidsmin = poids[j];
+							min = j;
+							/*printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
+							printf("Minimum = %d\n\n\n",min );*/
+						}
 					}
 				}
 			}
+
+			parcourue[min] = 1;
+			courant = min;
+			poidsmin = 999999;
+			/*printf("La valeur à travailler maintenant est %d\n",min );
+			printf("parcourue[%d] = %d\n",min, parcourue[min] );
+			printf("courant = %d\n", courant);
+			printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);*/	
 		}
 
-		parcourue[min] = 1;
-		courant = min;
-		poidsmin = 999999;
-		/*printf("La valeur à travailler maintenant est %d\n",min );
-		printf("parcourue[%d] = %d\n",min, parcourue[min] );
-		printf("courant = %d\n", courant);
-		printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);*/	
-	}
+		/*On stocke le plus court chemin dans un tableau*/
+		i = 0;
+		while(antecedant[min] != -1){
+			printf("\nmin = %d\n",min );
+			chemin[i] = antecedant[min];
+			printf("chemin i = %d\n",chemin[i]);
+			min = antecedant[min];
+			printf("antecedant min = %d\n",antecedant[i]);
+			i++;
+		}
 
-	/*On stocke le plus court chemin dans un tableau*/
-	i = 0;
-	while(antecedant[min] != -1){
-		printf("\nmin = %d\n",min );
-		chemin[i] = antecedant[min];
-		printf("chemin i = %d\n",chemin[i]);
-		min = antecedant[min];
-		printf("antecedant min = %d\n",antecedant[i]);
-		i++;
+		/*On affiche le chemin*/
+		printf("%d Le chemin est: \n", i);
+		for (i = i-1; i >= 0; i--)
+		{
+			printf("%d\t",chemin[i] );
+		}
+		printf("%d\n",arrive-1);
 	}
-
-	/*On affiche le chemin*/
-	printf("%d Le chemin est: \n", i);
-	for (i = i-1; i >= 0; i--)
-	{
-		printf("%d\t",chemin[i] );
-	}
-	printf("%d\n",arrive-1 );
+	
 		
 }
 
 
 void drawColor(Point2D p1, Point2D p2, int color){
-	glMatrixMode(GL_MODELVIEW);                
-        glLoadIdentity(); 
-        glPushMatrix();
-        glScalef(0.1, 0.1, 1);
+	SDL_Event e;
+	printf("appuyer sur la touche p\n");
+	while(SDL_PollEvent(&e)){
+		printf("dedans\n");
+		switch(e.type){
+			case SDL_KEYDOWN:
+				if( e.key.keysym.sym == SDLK_p){
+					glMatrixMode(GL_MODELVIEW);                
+				        glLoadIdentity(); 
+				        glPushMatrix();
+				        glScalef(0.1, 0.1, 1);
 
-		glBegin(GL_LINES);
-			if (color == 0)/*rouge*/
-				glColor3ub(255, 0, 0);
+						glBegin(GL_LINES);
+							if (color == 0)/*rouge*/
+								glColor3ub(255, 0, 0);
 
-			if (color == 1)/*dorée*/
-				glColor3ub(240, 195, 0);
-			
-			glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
-		glEnd();
-	glPopMatrix();
+							if (color == 1)/*dorée*/
+								glColor3ub(240, 195, 0);
+							
+							glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
+						glEnd();
+					glPopMatrix();
+
+				}
+			break;
+		}
+	}
+
+	
 }
 
 void circleColor(Point2D p1, int color){
-	glMatrixMode(GL_MODELVIEW);                
-        glLoadIdentity(); 
-        glPushMatrix();
-        glScalef(0.1, 0.1, 1);
-        glTranslatef(p1.x, p1.y, 0);
+	SDL_Event e;
+	printf("appuyer sur la touche p\n");
+	while(SDL_PollEvent(&e)){
+		printf("dedans\n");
+		switch(e.type){
+			case SDL_KEYDOWN:
+				if( e.key.keysym.sym == SDLK_p){
+					glMatrixMode(GL_MODELVIEW);                
+				        glLoadIdentity(); 
+				        glPushMatrix();
+				        glScalef(0.1, 0.1, 1);
+				        glTranslatef(p1.x, p1.y, 0);
 
-	 	glBegin(GL_TRIANGLE_FAN);
-	 		if (color == 0)/*rouge*/
-				glColor3ub(255, 0, 0);
+					 	glBegin(GL_TRIANGLE_FAN);
+					 		if (color == 0)/*rouge*/
+								glColor3ub(255, 0, 0);
 
-			if (color == 1)/*dorée*/
-				glColor3ub(240, 195, 0);
-			for (int j = 0; j <= SEGMENTS; j++){
-		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
-		 	}
-	glEnd();
+							if (color == 1)/*dorée*/
+								glColor3ub(240, 195, 0);
+							for (int j = 0; j <= SEGMENTS; j++){
+						      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
+						 	}
+					glEnd();
+				}
+			break;
+		}
+	}
+	
 }

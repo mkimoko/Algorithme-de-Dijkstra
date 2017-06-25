@@ -40,18 +40,19 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;       
   }    
 
+  int boo = 1;
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe));
   int tab[25];   
   Point2D position[5];
   initTab(tab, position);
-   
-  initGraphe(graphe, tab, 5);        
+     
+  initGraphe(graphe, tab, 5);          
   afficheGraphe(graphe); 
-  /*Dijkstra(graphe, 4, 3,position );*/        
+         
       
-                                                    
-             
+                                                     
+              
   /* Titre de la fenêtre */         
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
@@ -64,11 +65,11 @@ int main(int argc, char** argv) {
     /* Placer ici le code de dessin */          
     glClear(GL_COLOR_BUFFER_BIT);       
   
-    /*drawGraphe(graphe, position); */
-    Dijkstra(graphe, 1, 5,position );                  
+    drawGraphe(graphe,position,boo ); 
+    Dijkstra(graphe, 4, 3,position,boo);
   
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
-    SDL_GL_SwapBuffers();       
+    SDL_GL_SwapBuffers();        
       
     /* Boucle traitant les evenements */ 
     SDL_Event e;
@@ -95,21 +96,17 @@ int main(int argc, char** argv) {
         case SDL_KEYDOWN:
 
 
-          if( e.key.keysym.sym == SDLK_LEFT){
- 
-
-            
+          if( e.key.keysym.sym == SDLK_s){
+            printf("c'est appuyé!\n");
+            boo = 0;
+            printf("boo = %d\n", boo);
+        
           }
-
-          if( e.key.keysym.sym == SDLK_RIGHT){
-            
-          }
- 
 
           if( e.key.keysym.sym == SDLK_q) 
-            SDL_Quit();
-          break;
-
+            SDL_Quit(); 
+          break; 
+ 
            
         default:
           break;
@@ -123,6 +120,8 @@ int main(int argc, char** argv) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }
+
+
   /* Liberation des ressources associées à la SDL */ 
   SDL_Quit();
 
