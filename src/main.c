@@ -71,19 +71,19 @@ int main(int argc, char** argv) {
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();        
       
-    /* Boucle traitant les evenements */ 
+    /* Boucle traitant les evenements */  
     SDL_Event e;
-    while(SDL_PollEvent(&e)) {
+    while(SDL_PollEvent(&e)) { 
       /* L'utilisateur ferme la fenêtre : */     
-      if(e.type == SDL_QUIT) { 
-        loop = 0;
+      if(e.type == SDL_QUIT) {          
+        loop = 0;   
         break;
       }
        
       /* Quelques exemples de traitement d'evenements : */
       switch(e.type) {
         /* Clic souris */
-        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEBUTTONUP: 
           
           break;
 
