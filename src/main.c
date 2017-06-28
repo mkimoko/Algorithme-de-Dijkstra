@@ -12,10 +12,10 @@
    
 #define MYSCALE 0.05 
 
+ 
 
-
-/* Dimensions de la fenêtre */ 
-static unsigned int WINDOW_WIDTH = 800;       
+/* Dimensions de la fenêtre */    
+static unsigned int WINDOW_WIDTH = 800;          
 static unsigned int WINDOW_HEIGHT = 800; 
  
 /* Nombre de bits par pixel de la fenêtre */
@@ -24,8 +24,8 @@ static const unsigned int BIT_PER_PIXEL = 32;
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;   
 
-int main(int argc, char** argv) {        
-      
+int main(int argc, char** argv) {          
+       
   // initialisation de GLUT             
   glutInit(&argc, argv);                                
          
@@ -50,58 +50,55 @@ int main(int argc, char** argv) {
   initGraphe(graphe, tab, 5);           
   afficheGraphe(graphe); 
          
-      
-                                                     
               
   /* Titre de la fenêtre */         
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
   /* Boucle d'affichage */   
   int loop = 1;   
-  while(loop) { 
+  while(loop) {  
     /* Récupération du temps au début de la boucle */        
     Uint32 startTime = SDL_GetTicks();                            
       
-    /* Placer ici le code de dessin */          
+    /* Placer ici le code de dessin */            
     glClear(GL_COLOR_BUFFER_BIT);       
   
     drawGraphe(graphe,position,boo ); 
-    Dijkstra(graphe, 4, 3,position,boo);
+    Dijkstra(graphe, 1, 5,position,boo); 
   
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
-    SDL_GL_SwapBuffers();        
-      
+    SDL_GL_SwapBuffers();         
+       
     /* Boucle traitant les evenements */  
     SDL_Event e;
-    while(SDL_PollEvent(&e)) { 
+    while(SDL_PollEvent(&e)) {  
       /* L'utilisateur ferme la fenêtre : */     
-      if(e.type == SDL_QUIT) {          
+      if(e.type == SDL_QUIT) {               
         loop = 0;   
         break;
       }
        
       /* Quelques exemples de traitement d'evenements : */
-      switch(e.type) {
+      switch(e.type) {  
         /* Clic souris */
-        case SDL_MOUSEBUTTONUP: 
+        case SDL_MOUSEBUTTONUP:  
           
           break;
 
           case SDL_MOUSEMOTION: 
           
-          break; 
+          break;       
   
-
+ 
         /* Touche clavier */
         case SDL_KEYDOWN:
-
-
-          if( e.key.keysym.sym == SDLK_s){
+ 
+          if( e.key.keysym.sym == SDLK_s){ 
             printf("c'est appuyé!\n");
             boo = 0;
             printf("boo = %d\n", boo);
         
-          }
+          } 
 
           if( e.key.keysym.sym == SDLK_q) 
             SDL_Quit(); 

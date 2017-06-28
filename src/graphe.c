@@ -150,12 +150,19 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int min = -1;
 	int poidsmin = 9999999;
 	int chemin[g->nbsommets];
+	int redbool = 0, bluebool = 0, goldbool = 0;
+	int phase = 0;
+	int tmpcourant = 0;
+
 	SDL_Event e;
 
 	if(boo == 0)
 	{
 		drawGraphe(g, position, 1 );
-		for(i = 0; i < g->nbsommets; i++){
+
+		if (phase == 0 || phase == 1 || phase == 2)
+		{
+			for(i = 0; i < g->nbsommets; i++){
 				poids[i] = 999999; /* Poids infini */
 				antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
 				parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
@@ -164,7 +171,12 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 
 			parcourue[depart-1] = 1;
 			courant = depart-1;
+			circleColor(position[courant], 1,1 );
+		}
+		
 
+		if (phase == 1)
+		{
 			/*Tant que le poids d'arrive n'est pas le plus faible*/
 			while( poids[min] != poids[arrive-1]){
 				printf("\n\n");
@@ -183,10 +195,12 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 						printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
 						printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
 						printf("\n\n");
+
+						circleColor(position[i-courant*g->nbsommets], 0,1 );
+						drawColor(position[courant], position[i-courant*g->nbsommets],0, 1);
 					}
 					
 				}
-
 
 				/*On recherche le noeud avec le poids minimale non parcourue*/
 				for (i = 0; i < g->nbsommets; i++)
@@ -215,7 +229,10 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 				printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);
 				
 			}
+		}
 
+		if (phase == 2)
+		{
 			i = 0;
 			while(antecedant[min] != -1){
 				printf("\nmin = %d\n",min );
@@ -230,35 +247,77 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			for (i = i-1; i >= 0; i--)
 			{
 				printf("%d\t",chemin[i] );
+				circleColor(position[chemin[i]], 2,1 );
+				drawColor(position[chemin[i]], position[chemin[i+1]],2, 1);
 			}
 			printf("%d\n",arrive-1 );
 
+			
+		}
+
+		while(SDL_PollEvent(&e)){
+			printf("phase = %d\n",phase );
+			switch(e.type){
+				case SDL_KEYDOWN:
+					if( e.key.keysym.sym == SDLK_p){
+						phase = 1;
+						printf("phase = %d\n",phase );
+
+						while(SDL_PollEvent(&e)){
+							switch(e.type){
+
+								case SDL_KEYDOWN:
+									if( e.key.keysym.sym == SDLK_p){
+										phase = 2;
+										printf("phase = %d\n",phase );
+										return;
+									}
+								break;
+							}
+							
+						}			
+					}
+				break;		
+		}
+			
+			
 	}
+}
 								
 }
 
 
-void drawColor(Point2D p1, Point2D p2, int color){
+void drawColor(Point2D p1, Point2D p2, int color, int boo){
+
+	if (boo == 1)
+	{
+		glMatrixMode(GL_MODELVIEW);                
+			glLoadIdentity(); 
+			glPushMatrix();
+			glScalef(0.1, 0.1, 1);
+
+			glBegin(GL_LINES);
+			if (color == 0)/*rouge*/
+				glColor3ub(255, 0, 0);
+
+			if (color == 1)/*blue*/
+				glColor3ub(0,0,255);
+
+			if (color == 2)/*dorée*/
+				glColor3ub(240, 195, 0);
+								
+			glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
+			glEnd();
+		glPopMatrix();	
+	}
 	
-	glMatrixMode(GL_MODELVIEW);                
-		glLoadIdentity(); 
-		glPushMatrix();
-		glScalef(0.1, 0.1, 1);
-
-		glBegin(GL_LINES);
-		if (color == 0)/*rouge*/
-			glColor3ub(255, 0, 0);
-
-		if (color == 1)/*dorée*/
-			glColor3ub(240, 195, 0);
-							
-		glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
-		glEnd();
-	glPopMatrix();
 }
 
-void circleColor(Point2D p1, int color){
-	glMatrixMode(GL_MODELVIEW);                
+void circleColor(Point2D p1, int color, int boo){
+
+	if (boo == 1)
+	{
+		glMatrixMode(GL_MODELVIEW);                
 	    glLoadIdentity(); 
 		glPushMatrix();
 		glScalef(0.1, 0.1, 1);
@@ -267,11 +326,19 @@ void circleColor(Point2D p1, int color){
 			if (color == 0)/*rouge*/
 				glColor3ub(255, 0, 0);
 
-			if (color == 1)/*dorée*/
+			if (color == 1)/*blue*/
+				glColor3ub(0,0,255);
+
+			if (color == 2)/*dorée*/
 				glColor3ub(240, 195, 0);
+
 			for (int j = 0; j <= SEGMENTS; j++){
 		      glVertex2f(cos(j*(M_PI/(SEGMENTS/2))), sin(j*(M_PI/(SEGMENTS/2))));
 		 	}
-	glEnd();
-	
+		glEnd();
+	glPopMatrix();
+	}
 }
+
+
+
