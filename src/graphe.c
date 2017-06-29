@@ -151,7 +151,8 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int poidsmin = 9999999;
 	int chemin[g->nbsommets];
 	int redbool = 0, bluebool = 0, goldbool = 0;
-	int phase = 0;
+	int phase = 0,part = 1, part1 = 1, part2 = 1;
+	int tour = 0; 
 	int tmpcourant = 0;
 
 	SDL_Event e;
@@ -160,22 +161,40 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	{
 		drawGraphe(g, position, 1 );
 
-		if (phase == 0 || phase == 1 || phase == 2)
+		if (phase == 0 )
 		{
 			for(i = 0; i < g->nbsommets; i++){
 				poids[i] = 999999; /* Poids infini */
 				antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
 				parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
+				chemin[i] = -1;
 			}
 			poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
 
 			parcourue[depart-1] = 1;
 			courant = depart-1;
 			circleColor(position[courant], 1,1 );
+			printf("Nous somme dans la phase 0\n");
+
+
+			if (tour == 0)
+			{
+				while(SDL_PollEvent(&e)){
+					switch(e.type){
+						case SDL_KEYDOWN:
+							if( e.key.keysym.sym == SDLK_p){
+								part = 1;
+								tour = 1;			
+							}
+						break;		
+					}		
+				}
+			}
+
 		}
 		
 
-		if (phase == 1)
+		if (part == 1 && phase == 0)
 		{
 			/*Tant que le poids d'arrive n'est pas le plus faible*/
 			while( poids[min] != poids[arrive-1]){
@@ -191,13 +210,14 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 						/*On marque son antécédant*/
 						antecedant[i-courant*g->nbsommets] = courant;
 
-						printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
+						/*printf("\nPoids[%d] = %d\n",i-courant*g->nbsommets, poids[i-courant*g->nbsommets] );
 						printf("antecedant[%d] = %d\n",i-courant*g->nbsommets, antecedant[i-courant*g->nbsommets] );
 						printf("parcourue[%d] = %d\n",i-courant*g->nbsommets, parcourue[i-courant*g->nbsommets] );
-						printf("\n\n");
+						printf("\n\n");*/
 
 						circleColor(position[i-courant*g->nbsommets], 0,1 );
 						drawColor(position[courant], position[i-courant*g->nbsommets],0, 1);
+						printf("Nous sommes dans la part\n");
 					}
 					
 				}
@@ -213,8 +233,8 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 							{
 								poidsmin = poids[j];
 								min = j;
-								printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
-								printf("Minimum = %d\n\n\n",min );
+								/*printf("Comparaison poids[%d] = %d et poids[%d] = %d\n",i,poids[i],j,poids[j]);
+								printf("Minimum = %d\n\n\n",min );*/
 							}
 						}
 					}
@@ -223,15 +243,29 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 				parcourue[min] = 1;
 				courant = min;
 				poidsmin = 999999;
-				printf("La valeur à travailler maintenant est %d\n",min );
+				/*printf("La valeur à travailler maintenant est %d\n",min );
 				printf("parcourue[%d] = %d\n",min, parcourue[min] );
 				printf("courant = %d\n", courant);
-				printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);
-				
+				printf("Poids de arrive = %d - Poids de min = %d\n",poids[arrive-1],poids[min]);*/
+
+				if (tour == 1)
+				{
+					while(SDL_PollEvent(&e)){
+						switch(e.type){
+							case SDL_KEYDOWN:
+								if( e.key.keysym.sym == SDLK_p){
+									part1 = 1;
+									tour = 1;			
+								}
+							break;		
+						}		
+					}
+				}
+
 			}
 		}
 
-		if (phase == 2)
+		if (part1 == 1 && phase == 0) 
 		{
 			i = 0;
 			while(antecedant[min] != -1){
@@ -243,45 +277,38 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 				i++;
 			}
 
+			printf("Nous sommes dans la part 1\n");
 			printf("%d Le chemin est: \n", i);
 			for (i = i-1; i >= 0; i--)
 			{
-				printf("%d\t",chemin[i] );
+				printf("i= %d **** %d\t",i, chemin[i] );
 				circleColor(position[chemin[i]], 2,1 );
-				drawColor(position[chemin[i]], position[chemin[i+1]],2, 1);
+				drawColor(position[chemin[i]], position[chemin[i-1]],2, 1);
 			}
-			printf("%d\n",arrive-1 );
+			printf("chemin(i+1) = %d /// i= %d ****arrive %d\t",chemin[i+1],i,arrive-1 );
+			drawColor(position[chemin[arrive-1]], position[chemin[i+1]],2, 1);
 
-			
+			while(SDL_PollEvent(&e)){
+				switch(e.type){
+					case SDL_KEYDOWN:
+						if( e.key.keysym.sym == SDLK_p){
+							boo = 1;			
+						}
+					break;		
+				}		
+			}
+
 		}
 
 		while(SDL_PollEvent(&e)){
-			printf("phase = %d\n",phase );
 			switch(e.type){
 				case SDL_KEYDOWN:
 					if( e.key.keysym.sym == SDLK_p){
-						phase = 1;
-						printf("phase = %d\n",phase );
-
-						while(SDL_PollEvent(&e)){
-							switch(e.type){
-
-								case SDL_KEYDOWN:
-									if( e.key.keysym.sym == SDLK_p){
-										phase = 2;
-										printf("phase = %d\n",phase );
-										return;
-									}
-								break;
-							}
-							
-						}			
+						printf("phase = %d\n",phase );			
 					}
 				break;		
+			}		
 		}
-			
-			
-	}
 }
 								
 }

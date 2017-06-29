@@ -6,11 +6,11 @@
 #include <stdlib.h>      
 #include <stdio.h>  
 #include <math.h>                       
-     
+      
 #include "graphe.c"         
     
    
-#define MYSCALE 0.05 
+#define MYSCALE 0.05     
 
  
 
@@ -27,9 +27,9 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 int main(int argc, char** argv) {          
        
   // initialisation de GLUT             
-  glutInit(&argc, argv);                                
+  glutInit(&argc, argv);                                  
          
-  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {            
+  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {              
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
     return EXIT_FAILURE;                     
   }              
@@ -37,17 +37,17 @@ int main(int argc, char** argv) {
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-    return EXIT_FAILURE;       
-  }    
-
-  int boo = 1;
+    return EXIT_FAILURE;            
+  }               
+  
+  int boo = 1;       
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe));
   int tab[25];   
   Point2D position[5];
   initTab(tab, position);
      
-  initGraphe(graphe, tab, 5);           
+  initGraphe(graphe, tab, 5);            
   afficheGraphe(graphe); 
          
               
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     glClear(GL_COLOR_BUFFER_BIT);       
   
     drawGraphe(graphe,position,boo ); 
-    Dijkstra(graphe, 1, 5,position,boo); 
+    Dijkstra(graphe, 3, 5,position,boo);  
   
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();         
@@ -83,12 +83,12 @@ int main(int argc, char** argv) {
         /* Clic souris */
         case SDL_MOUSEBUTTONUP:  
           
-          break;
-
+          break;     
+   
           case SDL_MOUSEMOTION: 
-          
-          break;       
-  
+           
+          break;         
+    
  
         /* Touche clavier */
         case SDL_KEYDOWN:
@@ -96,18 +96,18 @@ int main(int argc, char** argv) {
           if( e.key.keysym.sym == SDLK_s){ 
             printf("c'est appuyé!\n");
             boo = 0;
-            printf("boo = %d\n", boo);
+            printf("boo = %d\n", boo); 
         
           } 
 
           if( e.key.keysym.sym == SDLK_q) 
             SDL_Quit(); 
           break; 
- 
+   
            
         default:
           break;
-      }
+      } 
     }
 
     /* Calcul du temps écoulé */
