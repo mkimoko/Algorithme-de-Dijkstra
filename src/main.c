@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;            
   }               
   
-  int boo = 1;       
+  int boo = 1;        
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe));
   int tab[25];   
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
   initTab(tab, position);
      
   initGraphe(graphe, tab, 5);            
-  afficheGraphe(graphe); 
+  afficheGraphe(graphe);   
          
               
   /* Titre de la fenêtre */         
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
    
           case SDL_MOUSEMOTION: 
            
-          break;         
+          break;           
     
  
         /* Touche clavier */

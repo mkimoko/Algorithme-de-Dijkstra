@@ -283,10 +283,11 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			{
 				printf("i= %d **** %d\t",i, chemin[i] );
 				circleColor(position[chemin[i]], 2,1 );
-				drawColor(position[chemin[i]], position[chemin[i-1]],2, 1);
+				drawColor(position[chemin[i]], position[chemin[i+1]],2, 1);
 			}
 			printf("chemin(i+1) = %d /// i= %d ****arrive %d\t",chemin[i+1],i,arrive-1 );
 			drawColor(position[chemin[arrive-1]], position[chemin[i+1]],2, 1);
+			circleColor(position[arrive-1], 2,1 );
 
 			while(SDL_PollEvent(&e)){
 				switch(e.type){
@@ -335,7 +336,7 @@ void drawColor(Point2D p1, Point2D p2, int color, int boo){
 								
 			glVertex2f(p1.x,p1.y);glVertex2f(p2.x,p2.y);
 			glEnd();
-		glPopMatrix();	
+		glPopMatrix();
 	}
 	
 }
