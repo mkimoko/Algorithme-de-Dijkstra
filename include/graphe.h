@@ -26,4 +26,3 @@ void circleColor(Point2D p1, int color, int boo);
 void drawGraphe(Graphe *g, Point2D *position, int boo );
 
 #endif
-

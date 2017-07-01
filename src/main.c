@@ -28,21 +28,21 @@ int main(int argc, char** argv) {
        
   // initialisation de GLUT             
   glutInit(&argc, argv);                                  
-         
+          
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {              
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
-    return EXIT_FAILURE;                     
-  }              
+    return EXIT_FAILURE;                         
+  }                    
    
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-    return EXIT_FAILURE;            
+    return EXIT_FAILURE;             
   }               
   
-  int boo = 1;        
+  int boo = 1;          
   Graphe *graphe;        
-  graphe = malloc(sizeof(Graphe));
+  graphe = malloc(sizeof(Graphe)); 
   int tab[25];   
   Point2D position[5];
   initTab(tab, position);
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
   /* Boucle d'affichage */   
-  int loop = 1;   
+  int loop = 1;    
   while(loop) {  
     /* Récupération du temps au début de la boucle */        
     Uint32 startTime = SDL_GetTicks();                            
@@ -64,7 +64,8 @@ int main(int argc, char** argv) {
     glClear(GL_COLOR_BUFFER_BIT);       
   
     drawGraphe(graphe,position,boo ); 
-    Dijkstra(graphe, 3, 5,position,boo);  
+    Dijkstra(graphe, 2, 4,position,boo); 
+    printf("Vous avez parcourue le graphe\n"); 
   
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();         
@@ -76,22 +77,22 @@ int main(int argc, char** argv) {
       if(e.type == SDL_QUIT) {               
         loop = 0;   
         break;
-      }
+      } 
        
       /* Quelques exemples de traitement d'evenements : */
-      switch(e.type) {  
+      switch(e.type) {    
         /* Clic souris */
         case SDL_MOUSEBUTTONUP:  
-          
+           
           break;     
    
-          case SDL_MOUSEMOTION: 
+          case SDL_MOUSEMOTION:  
            
-          break;           
+          break;                
     
  
         /* Touche clavier */
-        case SDL_KEYDOWN:
+        case SDL_KEYDOWN: 
  
           if( e.key.keysym.sym == SDLK_s){ 
             printf("c'est appuyé!\n");
