@@ -80,11 +80,12 @@ void drawLines(Point2D p1, Point2D p2){
 
 void drawGraphe(Graphe *g, Point2D *position, int boo ){
 	int i, j;
-	char *txt;
+	char *txt, txt2;
 	gluOrtho2D(0., 5., 0., 5.);
 	void *font = malloc(sizeof(void));
 	font = GLUT_BITMAP_TIMES_ROMAN_24;
 	txt = malloc(sizeof(char));
+	txt2 = malloc(sizeof(char));
 
 	if (boo == 1)
 	{
@@ -107,7 +108,6 @@ void drawGraphe(Graphe *g, Point2D *position, int boo ){
 			glPopMatrix();
 			ecrire(position[i].x+1.75, position[i].y+0.9,txt ,font); 
 
-		 	
 
 		 	for (j = 0; j < g->nbsommets; j++)
 		 	{
@@ -150,10 +150,9 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int min = -1;
 	int poidsmin = 9999999;
 	int chemin[g->nbsommets];
-	int redbool = 0, bluebool = 0, goldbool = 0;
-	int continuer = 0;
+	int continuer = 1;
 	int step = 0; 
-	int tmpcourant = 0;
+	int affiche = 1;
 
 	SDL_Event e;
 
@@ -161,148 +160,87 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	{
 		drawGraphe(g, position, 1 );
 
-		if (step == 0 )
-		{
-			continuer = 1;
-			for(i = 0; i < g->nbsommets; i++){
-				poids[i] = 999999; /* Poids infini */
-				antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
-				parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
-				chemin[i] = -1;
-			}
-			poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
-
-			parcourue[depart-1] = 1;
-			courant = depart-1;	
-			printf("step = 0\n");
-
-			while(continuer == 1){
-				circleColor(position[courant], 1,1 );			
-				
-				while(SDL_PollEvent(&e)){
-					switch(e.type){
-						case SDL_KEYDOWN:
-							if( e.key.keysym.sym == SDLK_p){
-								step = 1;
-								continuer = 0;
-							}
-						break;		
-					}		
-				}
-			}
+		for(i = 0; i < g->nbsommets; i++){
+			poids[i] = 999999; /* Poids infini */
+			antecedant[i] = -1; /* Aucun noeud n'as d'antécédent */
+			parcourue[i] = 0; /*Boolean aucun sommet n'as été parcourue*/
+			chemin[i] = -1;
 		}
-		
-		if (step == 1 )
-		{
-			continuer = 1;
-			/*Tant que le poids d'arrive n'est pas le plus faible*/
-			while( poids[min] != poids[arrive-1]){
-				/*On recherche les voisin de noeud courant*/
-				for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
+		poids[depart-1] = 0; /*Étant positionnée sur le noeud de départ sa distance par rapport à elle même est 0*/ 
+
+		parcourue[depart-1] = 1;
+		courant = depart-1;	
+
+			
+
+
+		/*Tant que le poids d'arrive n'est pas le plus faible*/
+		while( poids[min] != poids[arrive-1]){
+			/*On recherche les voisin de noeud courant*/
+			for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
+			{
+				/*circleColor(position[courant], 1, 1);*/
+
+				/*Si un noeud rempli les conditions*/
+				if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 				{
-					/*Si un noeud rempli les conditions*/
-					if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
-					{
-						/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
-						poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
-						/*On marque son antécédant*/
-						antecedant[i-courant*g->nbsommets] = courant;
-						printf("step = 1\n");
-						while(continuer == 1){	
-							circleColor(position[i-courant*g->nbsommets], 0,1 );
-							drawColor(position[courant], position[i-courant*g->nbsommets],0, 1);
-							
-							while(SDL_PollEvent(&e)){
-								switch(e.type){
-									case SDL_KEYDOWN:
-										if( e.key.keysym.sym == SDLK_p){
-											continuer = 0;
-										}
-									break;		
-								}		
-							}
-						}	
-					}
-					
+					/*drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
+					circleColor(position[i-courant*g->nbsommets], 0, 1);*/
+					/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
+					poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
+					/*On marque son antécédant*/
+					antecedant[i-courant*g->nbsommets] = courant;	
 				}
+					
+			}
 
-				/*On recherche le noeud avec le poids minimale non parcourue*/
-				for (i = 0; i < g->nbsommets; i++)
+			/*On recherche le noeud avec le poids minimale non parcourue*/
+			for (i = 0; i < g->nbsommets; i++)
+			{
+				if (parcourue[i] == 0 && poids[i] != 999999)
 				{
-					if (parcourue[i] == 0 && poids[i] != 999999)
+					for (j = 0; j < g->nbsommets; j++)
 					{
-						for (j = 0; j < g->nbsommets; j++)
+						if (parcourue[j] == 0 && poids[j] <= poidsmin && poids[j] != 999999)
 						{
-							if (parcourue[j] == 0 && poids[j] <= poidsmin && poids[j] != 999999)
-							{
-								poidsmin = poids[j];
-								min = j;
+							poidsmin = poids[j];
+							min = j;
 
-							}
 						}
 					}
 				}
-
-				parcourue[min] = 1;
-				courant = min;
-				poidsmin = 999999;
-				continuer = 1;
-
-
-				while(continuer == 1){	
-							
-					while(SDL_PollEvent(&e)){
-						circleColor(position[courant], 1,1 );
-						switch(e.type){
-							case SDL_KEYDOWN:
-								if( e.key.keysym.sym == SDLK_p){
-									step = 2;
-									continuer = 0;
-								}
-							break;		
-						}		
-					}
-				}
 			}
-		}
 
-		if (step == 2 ) 
-		{
+			parcourue[min] = 1;
+			courant = min;
+			poidsmin = 999999;
 			continuer = 1;
-			printf("step = 2\n");
-			i = 0;
-			while(antecedant[min] != -1){
-				chemin[i] = antecedant[min];
-				min = antecedant[min];
-				i++;
-			}
-
-			printf("%d Le chemin est: \n", i);
-			for (i = i-1; i >= 0; i--)
-			{
-				printf("%d\t",i, chemin[i] );
-			}
-			printf("%d\t",arrive-1 );
-
-			while(continuer == 1){	
-							
-				while(SDL_PollEvent(&e)){
-					switch(e.type){
-						case SDL_KEYDOWN:
-							if( e.key.keysym.sym == SDLK_p){
-								boo = 1;
-								continuer = 0;
-								printf("sortie pgrm\n");
-								return;
-							}
-						break;		
-					}		
-				}
-			}
+			drawColor(position[min], position[antecedant[min]], 1,1);
+			circleColor(position[min], 1, 1);
+			circleColor(position[antecedant[min]], 1, 1);
 
 		}
-	}
-								
+
+
+		i = 0;
+		while(antecedant[min] != -1){
+			chemin[i] = antecedant[min];
+			min = antecedant[min];
+			i++;
+		}
+
+		printf("%d Le chemin est: \n", i);
+		for (i = i-1; i >= 0; i--)
+		{
+			printf("%d\t",chemin[i] );
+			/*circleColor(position[chemin[i]], 2, 1);
+			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);*/
+
+		}
+		printf("%d\t",arrive-1 );
+		/*circleColor(position[arrive-1], 2, 1);
+		drawColor(position[chemin[i]], position[arrive-1], 2, 1);*/
+	}								
 }
 
 

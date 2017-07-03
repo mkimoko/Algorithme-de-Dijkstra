@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
   int boo = 1;          
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe)); 
-  int tab[25];   
+  int tab[25];    
   Point2D position[5];
   initTab(tab, position);
      
@@ -59,45 +59,44 @@ int main(int argc, char** argv) {
   while(loop) {  
     /* Récupération du temps au début de la boucle */        
     Uint32 startTime = SDL_GetTicks();                            
-      
+       
     /* Placer ici le code de dessin */            
-    glClear(GL_COLOR_BUFFER_BIT);       
+    glClear(GL_COLOR_BUFFER_BIT);                  
   
     drawGraphe(graphe,position,boo ); 
-    Dijkstra(graphe, 2, 4,position,boo); 
-    printf("Vous avez parcourue le graphe\n"); 
-  
+    Dijkstra(graphe, 2, 3,position,boo); 
+
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
-    SDL_GL_SwapBuffers();         
-       
+    SDL_GL_SwapBuffers();                           
+        
     /* Boucle traitant les evenements */  
-    SDL_Event e;
-    while(SDL_PollEvent(&e)) {  
-      /* L'utilisateur ferme la fenêtre : */     
+    SDL_Event e;               
+    while(SDL_PollEvent(&e)) {      
+      /* L'utilisateur ferme la fenêtre : */       
       if(e.type == SDL_QUIT) {               
         loop = 0;   
         break;
-      } 
+      }     
        
       /* Quelques exemples de traitement d'evenements : */
       switch(e.type) {    
         /* Clic souris */
-        case SDL_MOUSEBUTTONUP:  
+        case SDL_MOUSEBUTTONUP:    
            
-          break;     
+          break;         
    
           case SDL_MOUSEMOTION:  
            
-          break;                
+          break;                      
     
  
         /* Touche clavier */
         case SDL_KEYDOWN: 
  
-          if( e.key.keysym.sym == SDLK_s){ 
+          if( e.key.keysym.sym == SDLK_s){  
             printf("c'est appuyé!\n");
             boo = 0;
-            printf("boo = %d\n", boo); 
+            printf("boo = %d\n", boo);  
         
           } 
 
@@ -107,7 +106,7 @@ int main(int argc, char** argv) {
    
            
         default:
-          break;
+          break; 
       } 
     }
 
