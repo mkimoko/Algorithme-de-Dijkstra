@@ -20,9 +20,10 @@ void drawLines(Point2D p1, Point2D p2);
 
 void ecrire(int x, int y, char *string, void *font);
 
-void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position, int boo);
+int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position, int boo);
 void drawColor(Point2D p1, Point2D p2, int color, int boo);
 void circleColor(Point2D p1, int color, int boo);
 void drawGraphe(Graphe *g, Point2D *position, int boo );
+void poids(Graphe *g, Point2D *position);
 
 #endif

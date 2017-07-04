@@ -6,9 +6,7 @@
 #include <stdlib.h>      
 #include <stdio.h>  
 #include <math.h>                       
-      
 #include "graphe.c"         
-    
    
 #define MYSCALE 0.05     
 
@@ -25,10 +23,8 @@ static const unsigned int BIT_PER_PIXEL = 32;
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;   
 
 int main(int argc, char** argv) {          
-       
   // initialisation de GLUT             
   glutInit(&argc, argv);                                  
-          
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {              
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
     return EXIT_FAILURE;                         
@@ -40,15 +36,18 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;             
   }               
   
-  int boo = 1;          
+  int boo = 1;
+  int count = 1;          
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe)); 
-  int tab[25];    
+  int tab[25]; 
+  /*int arg0 = atoi(argv[0]);
+  int arg1 = atoi(argv[1]);*/
   Point2D position[5];
   initTab(tab, position);
      
   initGraphe(graphe, tab, 5);            
-  afficheGraphe(graphe);   
+  afficheGraphe(graphe);    
          
               
   /* Titre de la fenêtre */         
@@ -58,23 +57,31 @@ int main(int argc, char** argv) {
   int loop = 1;    
   while(loop) {  
     /* Récupération du temps au début de la boucle */        
-    Uint32 startTime = SDL_GetTicks();                            
+    Uint32 startTime = SDL_GetTicks();                             
        
-    /* Placer ici le code de dessin */            
-    glClear(GL_COLOR_BUFFER_BIT);                  
+    /* Placer ici le code de dessin */             
+    glClear(GL_COLOR_BUFFER_BIT);                      
   
     drawGraphe(graphe,position,boo ); 
-    Dijkstra(graphe, 2, 3,position,boo); 
+
+    if ( Dijkstra(graphe, 2, 3,position,boo) == 0)
+    {
+       boo = 1;
+       drawGraphe(graphe,position,boo );
+       SDL_Quit();
+    }
+
+    /*poids(graphe, position); */
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();                           
         
     /* Boucle traitant les evenements */  
-    SDL_Event e;               
+    SDL_Event e;                 
     while(SDL_PollEvent(&e)) {      
       /* L'utilisateur ferme la fenêtre : */       
-      if(e.type == SDL_QUIT) {               
-        loop = 0;   
+      if(e.type == SDL_QUIT) {                
+        loop = 0;     
         break;
       }     
        
@@ -83,11 +90,11 @@ int main(int argc, char** argv) {
         /* Clic souris */
         case SDL_MOUSEBUTTONUP:    
            
-          break;         
+          break;          
    
-          case SDL_MOUSEMOTION:  
+          case SDL_MOUSEMOTION:   
            
-          break;                      
+          break;                       
     
  
         /* Touche clavier */
@@ -96,11 +103,10 @@ int main(int argc, char** argv) {
           if( e.key.keysym.sym == SDLK_s){  
             printf("c'est appuyé!\n");
             boo = 0;
-            printf("boo = %d\n", boo);  
-        
-          } 
+            printf("boo = %d\n", boo);
+          }  
 
-          if( e.key.keysym.sym == SDLK_q) 
+          if( e.key.keysym.sym == SDLK_BACKSPACE) 
             SDL_Quit(); 
           break; 
    
@@ -117,7 +123,6 @@ int main(int argc, char** argv) {
       SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
     }
   }
-
 
   /* Liberation des ressources associées à la SDL */ 
   SDL_Quit();

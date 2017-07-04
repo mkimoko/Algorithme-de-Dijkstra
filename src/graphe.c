@@ -141,7 +141,7 @@ void ecrire(int x, int y, char *string, void *font){
 
 }
 
-void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
+int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int poids[g->nbsommets];
 	int antecedant[g->nbsommets];
 	int parcourue[g->nbsommets];
@@ -179,13 +179,55 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			/*On recherche les voisin de noeud courant*/
 			for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 			{
-				/*circleColor(position[courant], 1, 1);*/
+				while(continuer == 1){
+					printf("1\n");
+					circleColor(position[courant], 1, 1);
+					while(SDL_PollEvent(&e)){
+						switch(e.type){
+							case SDL_KEYDOWN:
+								if( e.key.keysym.sym == SDLK_p){
+									continuer = 0;
+								}
 
+								if( e.key.keysym.sym == SDLK_ESCAPE){
+									printf("hdscnqkljqsl\n");
+									boo = 0;
+									return 0;
+								} 
+
+							break;
+						}
+					}
+				}
+				continuer = 1;
+				
 				/*Si un noeud rempli les conditions*/
 				if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 				{
-					/*drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
-					circleColor(position[i-courant*g->nbsommets], 0, 1);*/
+
+					while(continuer == 1){
+						printf("2\n");
+						drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
+						circleColor(position[i-courant*g->nbsommets], 0, 1);
+						while(SDL_PollEvent(&e)){
+							switch(e.type){
+								case SDL_KEYDOWN:
+									if( e.key.keysym.sym == SDLK_p){
+										continuer = 0;
+									}
+
+									if( e.key.keysym.sym == SDLK_ESCAPE){
+										printf("hdscnqkljqsl\n");
+										boo = 0;
+										return 0;
+									} 
+
+								break;
+							}
+						}
+					}
+					continuer = 1;
+
 					/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
 					poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
 					/*On marque son antécédant*/
@@ -215,12 +257,31 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			courant = min;
 			poidsmin = 999999;
 			continuer = 1;
-			drawColor(position[min], position[antecedant[min]], 1,1);
-			circleColor(position[min], 1, 1);
-			circleColor(position[antecedant[min]], 1, 1);
 
+			while(continuer == 1){
+
+				printf("3\n");
+				drawColor(position[min], position[antecedant[min]], 1,1);
+				circleColor(position[min], 1, 1);
+				circleColor(position[antecedant[min]], 1, 1);
+				while(SDL_PollEvent(&e)){
+					switch(e.type){
+						case SDL_KEYDOWN:
+							if( e.key.keysym.sym == SDLK_p){
+								continuer = 0;
+							}
+
+							if( e.key.keysym.sym == SDLK_ESCAPE){
+								printf("hdscnqkljqsl\n");
+								boo = 0;
+								return 0;
+							} 
+						break;
+					}
+				}
+			}
+			continuer = 1;
 		}
-
 
 		i = 0;
 		while(antecedant[min] != -1){
@@ -229,18 +290,32 @@ void Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			i++;
 		}
 
+
+
+
 		printf("%d Le chemin est: \n", i);
 		for (i = i-1; i >= 0; i--)
 		{
 			printf("%d\t",chemin[i] );
-			/*circleColor(position[chemin[i]], 2, 1);
-			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);*/
+			circleColor(position[chemin[i]], 2, 1);
+			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);
 
 		}
 		printf("%d\t",arrive-1 );
-		/*circleColor(position[arrive-1], 2, 1);
-		drawColor(position[chemin[i]], position[arrive-1], 2, 1);*/
-	}								
+		circleColor(position[arrive-1], 2, 1);
+		drawColor(position[chemin[i]], position[arrive-1], 2, 1);
+		printf("final\n");
+
+
+		while(SDL_PollEvent(&e)){
+			if( e.key.keysym.sym == SDLK_SPACE){
+				printf("hdscnqkljqsl\n");
+				boo = 0;
+				return 0;
+			} 
+		}
+	}
+	return 1;								
 }
 
 
@@ -294,5 +369,25 @@ void circleColor(Point2D p1, int color, int boo){
 		 	}
 		glEnd();
 	glPopMatrix();
+	}
+}
+
+void poids(Graphe *g, Point2D *position){
+	void *font = malloc(sizeof(void));
+	char *txt = malloc(sizeof(char));
+	font = GLUT_BITMAP_TIMES_ROMAN_24;
+	txt = malloc(sizeof(char));
+
+	for (int i = 0; i < g->nbsommets; i++)
+	{
+		for (int j = 0; j < g->nbsommets; j++)
+		{
+			if (g->matrice[i*g->nbsommets + j] > 0)
+			{	
+				sprintf(txt, "%d", g->matrice[i*g->nbsommets + j]); 
+				strcat(txt, " ");
+				ecrire( ( position[i].x+position[i].x )/2, ( position[i].y+position[i].y )/2,txt ,font);
+			}
+		}
 	}
 }
