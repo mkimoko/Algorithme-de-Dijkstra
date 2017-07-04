@@ -180,17 +180,17 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 			{
 				while(continuer == 1){
-					printf("1\n");
 					circleColor(position[courant], 1, 1);
 					while(SDL_PollEvent(&e)){
 						switch(e.type){
 							case SDL_KEYDOWN:
 								if( e.key.keysym.sym == SDLK_p){
+									printf("step 1\n");
 									continuer = 0;
 								}
 
 								if( e.key.keysym.sym == SDLK_ESCAPE){
-									printf("hdscnqkljqsl\n");
+									printf("sortie programme\n");
 									boo = 0;
 									return 0;
 								} 
@@ -206,7 +206,6 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 				{
 
 					while(continuer == 1){
-						printf("2\n");
 						drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
 						circleColor(position[i-courant*g->nbsommets], 0, 1);
 						while(SDL_PollEvent(&e)){
@@ -214,10 +213,11 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 								case SDL_KEYDOWN:
 									if( e.key.keysym.sym == SDLK_p){
 										continuer = 0;
+										printf("step 2\n");
 									}
 
 									if( e.key.keysym.sym == SDLK_ESCAPE){
-										printf("hdscnqkljqsl\n");
+										printf("sortie programme\n");
 										boo = 0;
 										return 0;
 									} 
@@ -259,8 +259,6 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 			continuer = 1;
 
 			while(continuer == 1){
-
-				printf("3\n");
 				drawColor(position[min], position[antecedant[min]], 1,1);
 				circleColor(position[min], 1, 1);
 				circleColor(position[antecedant[min]], 1, 1);
@@ -269,10 +267,11 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 						case SDL_KEYDOWN:
 							if( e.key.keysym.sym == SDLK_p){
 								continuer = 0;
+								printf("step 3\n");
 							}
 
 							if( e.key.keysym.sym == SDLK_ESCAPE){
-								printf("hdscnqkljqsl\n");
+								printf("sortie animation\n");
 								boo = 0;
 								return 0;
 							} 
@@ -296,24 +295,22 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 		printf("%d Le chemin est: \n", i);
 		for (i = i-1; i >= 0; i--)
 		{
-			printf("%d\t",chemin[i] );
+			printf("%d\t",chemin[i]+1 );
 			circleColor(position[chemin[i]], 2, 1);
 			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);
 
 		}
-		printf("%d\t",arrive-1 );
+		printf("%d\t",arrive);
 		circleColor(position[arrive-1], 2, 1);
 		drawColor(position[chemin[i]], position[arrive-1], 2, 1);
-		printf("final\n");
-
 
 		while(SDL_PollEvent(&e)){
-			if( e.key.keysym.sym == SDLK_SPACE){
-				printf("hdscnqkljqsl\n");
-				boo = 0;
+			if( e.key.keysym.sym == SDLK_ESCAPE){
+				printf("Fin d'animation animation\n");
 				return 0;
 			} 
-		}
+		}	
+		
 	}
 	return 1;								
 }

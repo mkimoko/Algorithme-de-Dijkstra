@@ -1,5 +1,4 @@
 #include <SDL/SDL.h>       
-/*#include <SDL/SDL_image.h>*/   
 #include <GL/gl.h>                       
 #include <GL/glu.h>    
 #include <GL/glut.h>               
@@ -36,17 +35,22 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;             
   }               
   
+  /*Booleen pour fonction Dijkstra et DrawGraphe*/
   int boo = 1;
-  int count = 1;          
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe)); 
+  /*Tableau pour la matrice */
   int tab[25]; 
+  /*Conversion des paramètres mis en arguments*/
   int arg1 = atoi(argv[1]);
   int arg2 = atoi(argv[2]);
+  /*Tableau de points pour les noeuds du graphe*/
   Point2D position[5];
+  /*Initialisation de la matrice du graphe ainsi que les positions des noeuds (valeur fixe)*/
   initTab(tab, position);
-     
-  initGraphe(graphe, tab, 5);            
+  /*Initialisation du graphe*/   
+  initGraphe(graphe, tab, 5); 
+  /*Affichage de la matice sur le terminal*/           
   afficheGraphe(graphe);    
          
               
@@ -60,17 +64,18 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();                             
        
     /* Placer ici le code de dessin */             
-    glClear(GL_COLOR_BUFFER_BIT);                      
-  
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    /*Dessin du graphe*/
     drawGraphe(graphe,position,boo ); 
 
+    /*Si on appuie sur escape*/
     if ( Dijkstra(graphe, arg1, arg2,position,boo) == 0)
     {
-       boo = 1;
-       drawGraphe(graphe,position,boo );
        SDL_Quit();
     }
 
+    /*Fonction affichage ne marche pas car buffer overflow -> Problème à résoudre*/
     /*poids(graphe, position); */
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
@@ -82,35 +87,24 @@ int main(int argc, char** argv) {
       /* L'utilisateur ferme la fenêtre : */       
       if(e.type == SDL_QUIT) {                
         loop = 0;     
-        break;
+        break; 
       }     
        
       /* Quelques exemples de traitement d'evenements : */
       switch(e.type) {    
-        /* Clic souris */
-        case SDL_MOUSEBUTTONUP:    
-           
-          break;          
-   
-          case SDL_MOUSEMOTION:   
-           
-          break;                       
-    
- 
+      
         /* Touche clavier */
         case SDL_KEYDOWN: 
  
           if( e.key.keysym.sym == SDLK_s){  
-            printf("c'est appuyé!\n");
-            boo = 0;
-            printf("boo = %d\n", boo);
+            printf("Commençons!\n");
+            boo = 0;/*Avec boo = 0; C'est la fonction Dijkstra qui s'occupe d'afficher le graphe*/
           }  
 
-          if( e.key.keysym.sym == SDLK_BACKSPACE) 
+          if( e.key.keysym.sym == SDLK_ESCAPE) 
             SDL_Quit(); 
           break; 
    
-           
         default:
           break; 
       } 
