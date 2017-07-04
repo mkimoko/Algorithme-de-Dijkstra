@@ -41,8 +41,8 @@ int main(int argc, char** argv) {
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe)); 
   int tab[25]; 
-  /*int arg0 = atoi(argv[0]);
-  int arg1 = atoi(argv[1]);*/
+  int arg1 = atoi(argv[1]);
+  int arg2 = atoi(argv[2]);
   Point2D position[5];
   initTab(tab, position);
      
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
   
     drawGraphe(graphe,position,boo ); 
 
-    if ( Dijkstra(graphe, 2, 3,position,boo) == 0)
+    if ( Dijkstra(graphe, arg1, arg2,position,boo) == 0)
     {
        boo = 1;
        drawGraphe(graphe,position,boo );
