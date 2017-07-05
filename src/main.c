@@ -32,11 +32,12 @@ int main(int argc, char** argv) {
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-    return EXIT_FAILURE;             
+    return EXIT_FAILURE;              
   }               
   
   /*Booleen pour fonction Dijkstra et DrawGraphe*/
   int boo = 1;
+  int step = 0;
   Graphe *graphe;        
   graphe = malloc(sizeof(Graphe)); 
   /*Tableau pour la matrice */
@@ -51,7 +52,7 @@ int main(int argc, char** argv) {
   /*Initialisation du graphe*/   
   initGraphe(graphe, tab, 5); 
   /*Affichage de la matice sur le terminal*/           
-  afficheGraphe(graphe);    
+  afficheGraphe(graphe);     
          
               
   /* Titre de la fenêtre */         
@@ -64,13 +65,15 @@ int main(int argc, char** argv) {
     Uint32 startTime = SDL_GetTicks();                             
        
     /* Placer ici le code de dessin */             
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    glClear(GL_COLOR_BUFFER_BIT); 
+ 
     /*Dessin du graphe*/
     drawGraphe(graphe,position,boo ); 
 
+    Dijkstra(graphe,/*arg1*/2,/*arg2*/3,position,step,boo);
+
     /*Si on appuie sur escape*/
-    if ( Dijkstra(graphe, arg1, arg2,position,boo) == 0)
+    if ( Dijkstra(graphe, /*arg1*/2, /*arg2*/3,position, step,boo) == 0)
     {
        SDL_Quit();
     }
@@ -104,6 +107,9 @@ int main(int argc, char** argv) {
           if( e.key.keysym.sym == SDLK_ESCAPE) 
             SDL_Quit(); 
           break; 
+
+          if( e.key.keysym.sym == SDLK_p)
+            step++;
    
         default:
           break; 

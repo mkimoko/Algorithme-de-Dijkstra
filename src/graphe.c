@@ -141,7 +141,7 @@ void ecrire(int x, int y, char *string, void *font){
 
 }
 
-int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
+int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int boo){
 	int poids[g->nbsommets];
 	int antecedant[g->nbsommets];
 	int parcourue[g->nbsommets];
@@ -151,8 +151,9 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 	int poidsmin = 9999999;
 	int chemin[g->nbsommets];
 	int continuer = 1;
-	int step = 0; 
 	int affiche = 1;
+	int *result;
+	result = malloc(sizeof(int));
 
 	SDL_Event e;
 
@@ -291,18 +292,25 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int boo){
 
 
 
-
+		int count = 0;
 		printf("%d Le chemin est: \n", i);
 		for (i = i-1; i >= 0; i--)
 		{
-			printf("%d\t",chemin[i]+1 );
-			circleColor(position[chemin[i]], 2, 1);
-			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);
+			result[count] = chemin[i];
+			/*printf("%d\t",chemin[i]+1 );*/
+			count++;
+			/*circleColor(position[chemin[i]], 2, 1);
+			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);*/
 
 		}
-		printf("%d\t",arrive);
-		circleColor(position[arrive-1], 2, 1);
-		drawColor(position[chemin[i]], position[arrive-1], 2, 1);
+		result[count] = arrive-1;
+		/*printf("%d\t",arrive);*/
+		/*circleColor(position[arrive-1], 2, 1);
+		drawColor(position[chemin[i]], position[arrive-1], 2, 1);*/
+		for (i = 0; i <= count; i++)
+		{
+			printf("%d\t",result[i] );
+		}
 
 		while(SDL_PollEvent(&e)){
 			if( e.key.keysym.sym == SDLK_ESCAPE){
