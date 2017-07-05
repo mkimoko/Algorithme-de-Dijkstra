@@ -113,15 +113,14 @@ void drawGraphe(Graphe *g, Point2D *position, int boo ){
 		 		if (g->matrice[i*g->nbsommets + j] > 0)
 		 		{
 		 			drawLines(position[i], position[j]);
+		 			affichePoids(g->matrice[i*g->nbsommets + j], (position[i].x + position[j].x)/2, (position[i].y + position[j].y)/2);
 		 		}
 		 	}
 
 		 	
 		 	/**********Fin Matrice**********/
 		} 
-	}
-
-	
+	}	
 }
 
 void ecrire(int x, int y, char *string, void *font){
@@ -152,16 +151,11 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 	int poidsmin = 9999999;
 	int *chemin;
 	int *result;
-	char *txt;
-	void *font = malloc(sizeof(void));
-	font = GLUT_BITMAP_TIMES_ROMAN_24;
 	result = malloc(sizeof(int));
 	poids = malloc(sizeof(int));
 	antecedant = malloc(sizeof(int));
 	parcourue = malloc(sizeof(int));
 	chemin = malloc(sizeof(int));
-	txt = malloc(sizeof(char));
-
 
 	if(boo == 0)
 	{
@@ -194,7 +188,6 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 				if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 				{
 
-					/*while(continuer == 1){*/
 					if (step == 2 || step == 3 || step == 4)
 					{
 						drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
@@ -284,6 +277,7 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 	free(antecedant);
 	free(parcourue);
 	free(chemin);
+
 	return 1;								
 }
 
@@ -338,5 +332,17 @@ void circleColor(Point2D p1, int color, int boo){
 		 	}
 		glEnd();
 	glPopMatrix();
+
 	}
+}
+
+
+void affichePoids(int poids, int x, int y){
+	char *txt = malloc(sizeof(char));
+	void *font = malloc(sizeof(void));
+	font = GLUT_BITMAP_TIMES_ROMAN_24;
+
+	sprintf(txt,"%d", poids);
+	ecrire(x, y,txt ,font); 
+	free(txt);
 }

@@ -23,10 +23,10 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 int main(int argc, char** argv) {          
   // initialisation de GLUT             
-  glutInit(&argc, argv);                                  
+  glutInit(&argc, argv);                                     
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {              
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");        
-    return EXIT_FAILURE;                         
+    return EXIT_FAILURE;                            
   }                    
    
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
@@ -52,20 +52,20 @@ int main(int argc, char** argv) {
   /*Initialisation du graphe*/   
   initGraphe(graphe, tab, 5); 
   /*Affichage de la matice sur le terminal*/              
-  afficheGraphe(graphe);                  
+  afficheGraphe(graphe);                    
          
               
   /* Titre de la fenêtre */         
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
   /* Boucle d'affichage */   
-  int loop = 1;     
-  while(loop) {    
+  int loop = 1;      
+  while(loop) {     
     /* Récupération du temps au début de la boucle */        
-    Uint32 startTime = SDL_GetTicks();                             
+    Uint32 startTime = SDL_GetTicks();                               
        
     /* Placer ici le code de dessin */             
-    glClear(GL_COLOR_BUFFER_BIT);  
+    glClear(GL_COLOR_BUFFER_BIT);      
  
     /*Dessin du graphe*/
     drawGraphe(graphe,position,boo );    
@@ -73,13 +73,13 @@ int main(int argc, char** argv) {
     Dijkstra(graphe,arg1,arg2,position,step,boo);  
 
     /*Si on appuie sur escape*/
-    if ( Dijkstra(graphe, arg1, arg2,position, step,boo) == 0)
+    if ( Dijkstra(graphe, arg1, arg2,position, step,boo) == 0) 
     {
-       SDL_Quit(); 
+       SDL_Quit();     
     }
 
     /*Fonction affichage ne marche pas car buffer overflow -> Problème à résoudre*/
-    /*poids(graphe, position);*/ 
+    /*poids(graphe, position);*/
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();                           
@@ -99,16 +99,16 @@ int main(int argc, char** argv) {
         /* Touche clavier */
         case SDL_KEYDOWN: 
  
-          if( e.key.keysym.sym == SDLK_s){    
+          if( e.key.keysym.sym == SDLK_s){     
             printf("Commençons!\n");
             boo = 0;/*Avec boo = 0; C'est la fonction Dijkstra qui s'occupe d'afficher le graphe*/
             step = 0;
           }   
 
           if( e.key.keysym.sym == SDLK_ESCAPE){
-            printf("Fin d'animation\n");
+            printf("Fin d'animation\n"); 
             SDL_Quit();
-          } 
+          }    
 
           if( e.key.keysym.sym == SDLK_p){
             step++;
@@ -116,7 +116,7 @@ int main(int argc, char** argv) {
 
             if (boo == 0)
             {
-              if(step == 5){
+              if(step == 5){  
                 boo = 1;
                 step = 0;
               }
@@ -126,10 +126,8 @@ int main(int argc, char** argv) {
           } 
              
           break; 
-
-          
-   
-        default:
+  
+        default: 
           break; 
       } 
     }

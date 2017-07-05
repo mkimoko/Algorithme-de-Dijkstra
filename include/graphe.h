@@ -24,6 +24,6 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step, int 
 void drawColor(Point2D p1, Point2D p2, int color, int boo);
 void circleColor(Point2D p1, int color, int boo);
 void drawGraphe(Graphe *g, Point2D *position, int boo );
-void poids(Graphe *g, Point2D *position);
+void affichePoids(int poids, int x, int y);
 
 #endif
