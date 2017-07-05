@@ -115,8 +115,10 @@ void drawGraphe(Graphe *g, Point2D *position, int boo ){
 		 			drawLines(position[i], position[j]);
 		 		}
 		 	}
+
+		 	
 		 	/**********Fin Matrice**********/
-		  } 
+		} 
 	}
 
 	
@@ -150,11 +152,15 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 	int poidsmin = 9999999;
 	int *chemin;
 	int *result;
+	char *txt;
+	void *font = malloc(sizeof(void));
+	font = GLUT_BITMAP_TIMES_ROMAN_24;
 	result = malloc(sizeof(int));
 	poids = malloc(sizeof(int));
 	antecedant = malloc(sizeof(int));
 	parcourue = malloc(sizeof(int));
 	chemin = malloc(sizeof(int));
+	txt = malloc(sizeof(char));
 
 
 	if(boo == 0)
@@ -273,11 +279,11 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 		
 	}
 
-	result = malloc(sizeof(int));
-	poids = malloc(sizeof(int));
-	antecedant = malloc(sizeof(int));
-	parcourue = malloc(sizeof(int));
-	chemin = malloc(sizeof(int));
+	free(result);
+	free(poids);
+	free(antecedant);
+	free(parcourue);
+	free(chemin);
 	return 1;								
 }
 
@@ -334,23 +340,3 @@ void circleColor(Point2D p1, int color, int boo){
 	glPopMatrix();
 	}
 }
-
-/*void poids(Graphe *g, Point2D *position){
-	void *font = malloc(sizeof(void));
-	char *txt = malloc(sizeof(char));
-	font = GLUT_BITMAP_TIMES_ROMAN_24;
-	txt = malloc(sizeof(char));
-
-	for (int i = 0; i < g->nbsommets; i++)
-	{
-		for (int j = 0; j < g->nbsommets; j++)
-		{
-			if (g->matrice[i*g->nbsommets + j] > 0)
-			{	
-				sprintf(txt, "%d", g->matrice[i*g->nbsommets + j]); 
-				strcat(txt, " ");
-				ecrire( ( position[i].x+position[i].x )/2, ( position[i].y+position[i].y )/2,txt ,font);
-			}
-		}
-	}
-}*/

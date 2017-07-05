@@ -59,27 +59,27 @@ int main(int argc, char** argv) {
   SDL_WM_SetCaption("Shall we begin this Dijkstra algorithm ?!", NULL);  
 
   /* Boucle d'affichage */   
-  int loop = 1;    
-  while(loop) {  
+  int loop = 1;     
+  while(loop) {    
     /* Récupération du temps au début de la boucle */        
     Uint32 startTime = SDL_GetTicks();                             
        
     /* Placer ici le code de dessin */             
-    glClear(GL_COLOR_BUFFER_BIT); 
+    glClear(GL_COLOR_BUFFER_BIT);  
  
     /*Dessin du graphe*/
-    drawGraphe(graphe,position,boo ); 
+    drawGraphe(graphe,position,boo );    
 
-    Dijkstra(graphe,arg1,arg2,position,step,boo);
+    Dijkstra(graphe,arg1,arg2,position,step,boo);  
 
     /*Si on appuie sur escape*/
     if ( Dijkstra(graphe, arg1, arg2,position, step,boo) == 0)
     {
-       SDL_Quit();
+       SDL_Quit(); 
     }
 
     /*Fonction affichage ne marche pas car buffer overflow -> Problème à résoudre*/
-    /*poids(graphe, position); */
+    /*poids(graphe, position);*/ 
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();                           
@@ -117,9 +117,9 @@ int main(int argc, char** argv) {
             if (boo == 0)
             {
               if(step == 5){
-              boo = 1;
-              step = 0;
-            }
+                boo = 1;
+                step = 0;
+              }
             }
             
                
