@@ -80,12 +80,11 @@ void drawLines(Point2D p1, Point2D p2){
 
 void drawGraphe(Graphe *g, Point2D *position, int boo ){
 	int i, j;
-	char *txt, txt2;
+	char *txt;
 	gluOrtho2D(0., 5., 0., 5.);
 	void *font = malloc(sizeof(void));
 	font = GLUT_BITMAP_TIMES_ROMAN_24;
 	txt = malloc(sizeof(char));
-	txt2 = malloc(sizeof(char));
 
 	if (boo == 1)
 	{
@@ -142,20 +141,21 @@ void ecrire(int x, int y, char *string, void *font){
 }
 
 int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int boo){
-	int poids[g->nbsommets];
-	int antecedant[g->nbsommets];
-	int parcourue[g->nbsommets];
+	int *poids;
+	int *antecedant;
+	int *parcourue;
 	int i = 0, j = 0;
 	int courant = 0;/*variable test du poids*/
 	int min = -1;
 	int poidsmin = 9999999;
-	int chemin[g->nbsommets];
-	int continuer = 1;
-	int affiche = 1;
+	int *chemin;
 	int *result;
 	result = malloc(sizeof(int));
+	poids = malloc(sizeof(int));
+	antecedant = malloc(sizeof(int));
+	parcourue = malloc(sizeof(int));
+	chemin = malloc(sizeof(int));
 
-	SDL_Event e;
 
 	if(boo == 0)
 	{
@@ -173,61 +173,28 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 		courant = depart-1;	
 
 			
-
+		if (step == 1 || step == 2 || step == 3 || step == 4)
+		{
+			circleColor(position[courant], 1, 1);
+		}
 
 		/*Tant que le poids d'arrive n'est pas le plus faible*/
 		while( poids[min] != poids[arrive-1]){
 			/*On recherche les voisin de noeud courant*/
 			for(i = courant*g->nbsommets; i < (courant+1)*g->nbsommets; i++ )
 			{
-				while(continuer == 1){
-					circleColor(position[courant], 1, 1);
-					while(SDL_PollEvent(&e)){
-						switch(e.type){
-							case SDL_KEYDOWN:
-								if( e.key.keysym.sym == SDLK_p){
-									printf("step 1\n");
-									continuer = 0;
-								}
-
-								if( e.key.keysym.sym == SDLK_ESCAPE){
-									printf("sortie programme\n");
-									boo = 0;
-									return 0;
-								} 
-
-							break;
-						}
-					}
-				}
-				continuer = 1;
-				
+								
 				/*Si un noeud rempli les conditions*/
 				if (g->matrice[i] > 0 && parcourue[i-courant*g->nbsommets] == 0 && poids[courant] + g->matrice[i] < poids[i-courant*g->nbsommets])
 				{
 
-					while(continuer == 1){
+					/*while(continuer == 1){*/
+					if (step == 2 || step == 3 || step == 4)
+					{
 						drawColor(position[courant], position[i-courant*g->nbsommets], 0,1);
 						circleColor(position[i-courant*g->nbsommets], 0, 1);
-						while(SDL_PollEvent(&e)){
-							switch(e.type){
-								case SDL_KEYDOWN:
-									if( e.key.keysym.sym == SDLK_p){
-										continuer = 0;
-										printf("step 2\n");
-									}
-
-									if( e.key.keysym.sym == SDLK_ESCAPE){
-										printf("sortie programme\n");
-										boo = 0;
-										return 0;
-									} 
-
-								break;
-							}
-						}
 					}
-					continuer = 1;
+						
 
 					/*On ajoute sa distance au poids parcourue jusqu'au noeud sur lequel on se trouve*/
 					poids[i-courant*g->nbsommets] = poids[courant] + g->matrice[i];
@@ -257,30 +224,15 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 			parcourue[min] = 1;
 			courant = min;
 			poidsmin = 999999;
-			continuer = 1;
 
-			while(continuer == 1){
+
+			if (step == 3 || step == 4)
+			{
 				drawColor(position[min], position[antecedant[min]], 1,1);
 				circleColor(position[min], 1, 1);
 				circleColor(position[antecedant[min]], 1, 1);
-				while(SDL_PollEvent(&e)){
-					switch(e.type){
-						case SDL_KEYDOWN:
-							if( e.key.keysym.sym == SDLK_p){
-								continuer = 0;
-								printf("step 3\n");
-							}
-
-							if( e.key.keysym.sym == SDLK_ESCAPE){
-								printf("sortie animation\n");
-								boo = 0;
-								return 0;
-							} 
-						break;
-					}
-				}
 			}
-			continuer = 1;
+			
 		}
 
 		i = 0;
@@ -293,33 +245,39 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 
 
 		int count = 0;
-		printf("%d Le chemin est: \n", i);
 		for (i = i-1; i >= 0; i--)
 		{
 			result[count] = chemin[i];
-			/*printf("%d\t",chemin[i]+1 );*/
 			count++;
-			/*circleColor(position[chemin[i]], 2, 1);
-			drawColor(position[chemin[i]], position[chemin[i-1]], 2, 1);*/
-
 		}
 		result[count] = arrive-1;
-		/*printf("%d\t",arrive);*/
-		/*circleColor(position[arrive-1], 2, 1);
-		drawColor(position[chemin[i]], position[arrive-1], 2, 1);*/
-		for (i = 0; i <= count; i++)
+
+
+		if (step == 4)
 		{
-			printf("%d\t",result[i] );
+			i= 0;
+			for (i = 0; i < count; i++)
+			{
+				circleColor(position[result[i]], 2, 1);
+				drawColor(position[result[i]], position[result[i+1]], 2, 1);
+			}
+			circleColor(position[result[i]], 2, 1);
+
 		}
 
-		while(SDL_PollEvent(&e)){
-			if( e.key.keysym.sym == SDLK_ESCAPE){
-				printf("Fin d'animation animation\n");
-				return 0;
-			} 
+		if (step == 5)
+		{
+			printf("Fin d'animation\n");
+			return 0;
 		}	
 		
 	}
+
+	result = malloc(sizeof(int));
+	poids = malloc(sizeof(int));
+	antecedant = malloc(sizeof(int));
+	parcourue = malloc(sizeof(int));
+	chemin = malloc(sizeof(int));
 	return 1;								
 }
 
@@ -377,7 +335,7 @@ void circleColor(Point2D p1, int color, int boo){
 	}
 }
 
-void poids(Graphe *g, Point2D *position){
+/*void poids(Graphe *g, Point2D *position){
 	void *font = malloc(sizeof(void));
 	char *txt = malloc(sizeof(char));
 	font = GLUT_BITMAP_TIMES_ROMAN_24;
@@ -395,4 +353,4 @@ void poids(Graphe *g, Point2D *position){
 			}
 		}
 	}
-}
+}*/

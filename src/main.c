@@ -7,7 +7,7 @@
 #include <math.h>                       
 #include "graphe.c"         
    
-#define MYSCALE 0.05     
+#define MYSCALE 0.05        
 
  
 
@@ -32,14 +32,14 @@ int main(int argc, char** argv) {
   /* Ouverture d'une fenêtre et création d'un contexte OpenGL */
   if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_GL_DOUBLEBUFFER)) {
     fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-    return EXIT_FAILURE;              
+    return EXIT_FAILURE;                        
   }               
   
   /*Booleen pour fonction Dijkstra et DrawGraphe*/
   int boo = 1;
   int step = 0;
   Graphe *graphe;        
-  graphe = malloc(sizeof(Graphe)); 
+  graphe = malloc(sizeof(Graphe));   
   /*Tableau pour la matrice */
   int tab[25]; 
   /*Conversion des paramètres mis en arguments*/
@@ -48,11 +48,11 @@ int main(int argc, char** argv) {
   /*Tableau de points pour les noeuds du graphe*/
   Point2D position[5];
   /*Initialisation de la matrice du graphe ainsi que les positions des noeuds (valeur fixe)*/
-  initTab(tab, position);
+  initTab(tab, position);  
   /*Initialisation du graphe*/   
   initGraphe(graphe, tab, 5); 
-  /*Affichage de la matice sur le terminal*/           
-  afficheGraphe(graphe);     
+  /*Affichage de la matice sur le terminal*/              
+  afficheGraphe(graphe);                  
          
               
   /* Titre de la fenêtre */         
@@ -70,10 +70,10 @@ int main(int argc, char** argv) {
     /*Dessin du graphe*/
     drawGraphe(graphe,position,boo ); 
 
-    Dijkstra(graphe,/*arg1*/2,/*arg2*/3,position,step,boo);
+    Dijkstra(graphe,arg1,arg2,position,step,boo);
 
     /*Si on appuie sur escape*/
-    if ( Dijkstra(graphe, /*arg1*/2, /*arg2*/3,position, step,boo) == 0)
+    if ( Dijkstra(graphe, arg1, arg2,position, step,boo) == 0)
     {
        SDL_Quit();
     }
@@ -94,22 +94,40 @@ int main(int argc, char** argv) {
       }     
        
       /* Quelques exemples de traitement d'evenements : */
-      switch(e.type) {    
+      switch(e.type) {      
       
         /* Touche clavier */
         case SDL_KEYDOWN: 
  
-          if( e.key.keysym.sym == SDLK_s){  
+          if( e.key.keysym.sym == SDLK_s){    
             printf("Commençons!\n");
             boo = 0;/*Avec boo = 0; C'est la fonction Dijkstra qui s'occupe d'afficher le graphe*/
-          }  
+            step = 0;
+          }   
 
-          if( e.key.keysym.sym == SDLK_ESCAPE) 
-            SDL_Quit(); 
+          if( e.key.keysym.sym == SDLK_ESCAPE){
+            printf("Fin d'animation\n");
+            SDL_Quit();
+          } 
+
+          if( e.key.keysym.sym == SDLK_p){
+            step++;
+            printf("step == %d\n",step );
+
+            if (boo == 0)
+            {
+              if(step == 5){
+              boo = 1;
+              step = 0;
+            }
+            }
+            
+               
+          } 
+             
           break; 
 
-          if( e.key.keysym.sym == SDLK_p)
-            step++;
+          
    
         default:
           break; 
