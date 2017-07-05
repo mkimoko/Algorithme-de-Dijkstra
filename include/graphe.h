@@ -25,5 +25,6 @@ void drawColor(Point2D p1, Point2D p2, int color, int boo);
 void circleColor(Point2D p1, int color, int boo);
 void drawGraphe(Graphe *g, Point2D *position, int boo );
 void affichePoids(int poids, int x, int y);
+void PoidsMin(int poids);
 
 #endif

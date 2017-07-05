@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
       switch(e.type) {      
       
         /* Touche clavier */
-        case SDL_KEYDOWN: 
+        case SDL_KEYDOWN:    
  
           if( e.key.keysym.sym == SDLK_s){     
             printf("Commençons!\n");

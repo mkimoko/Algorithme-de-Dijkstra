@@ -113,11 +113,10 @@ void drawGraphe(Graphe *g, Point2D *position, int boo ){
 		 		if (g->matrice[i*g->nbsommets + j] > 0)
 		 		{
 		 			drawLines(position[i], position[j]);
-		 			affichePoids(g->matrice[i*g->nbsommets + j], (position[i].x + position[j].x)/2, (position[i].y + position[j].y)/2);
+		 			/*affichePoids(g->matrice[i*g->nbsommets + j], (position[i].x + position[j].x)/2, (position[i].y + position[j].y)/2);*/
 		 		}
 		 	}
 
-		 	
 		 	/**********Fin Matrice**********/
 		} 
 	}	
@@ -230,6 +229,7 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 				drawColor(position[min], position[antecedant[min]], 1,1);
 				circleColor(position[min], 1, 1);
 				circleColor(position[antecedant[min]], 1, 1);
+				/*PoidsMin(poids[min]);*/
 			}
 			
 		}
@@ -261,6 +261,7 @@ int Dijkstra(Graphe *g, int depart, int arrive, Point2D *position,int step,int b
 				drawColor(position[result[i]], position[result[i+1]], 2, 1);
 			}
 			circleColor(position[result[i]], 2, 1);
+			/*PoidsMin(poids[min]);*/
 
 		}
 
@@ -344,5 +345,16 @@ void affichePoids(int poids, int x, int y){
 
 	sprintf(txt,"%d", poids);
 	ecrire(x, y,txt ,font); 
+	free(txt);
+}
+
+void PoidsMin(int poids){
+	char *txt = malloc(sizeof(char));
+	void *font = malloc(sizeof(void));
+	font = GLUT_BITMAP_TIMES_ROMAN_24;
+
+	ecrire(-9,-9.5," Le poids minimal est de: ",font);
+	sprintf(txt,"%d", poids);
+	ecrire(5,-9.5,txt,font); 
 	free(txt);
 }
